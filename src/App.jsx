@@ -584,11 +584,20 @@ function Pasajeros({data,setData}){
       <Card>
         <div style={{fontSize:14,fontWeight:600,color:C.t1,marginBottom:14}}>Lista por viaje</div>
         <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:16}}>
-          {trips.map(t=>{const pax=passengers.filter(p=>p.tripId===t.id);return(
-            <button key={t.id} onClick={()=>setViewTrip(viewTrip===t.id?null:t.id)} style={{padding:"8px 14px",borderRadius:8,border:`1px solid ${viewTrip===t.id?C.accent:C.border}`,background:viewTrip===t.id?C.accentL:"transparent",color:viewTrip===t.id?C.accent:C.t2,fontSize:13,cursor:"pointer",fontWeight:500}}>
-              {flags[t.country]||"🌍"} {t.destination} <span style={{background:C.accent,color:"#fff",borderRadius:100,padding:"1px 7px",fontSize:10,marginLeft:6}}>{pax.length}</span>
-            </button>
-          );})}
+          {trips.filter(t=>passengers.some(p=>p.tripId===t.id)).map(t=>{
+            const pax=passengers.filter(p=>p.tripId===t.id);
+            return(
+              <button key={t.id} onClick={()=>setViewTrip(viewTrip===t.id?null:t.id)} 
+                style={{padding:"8px 14px",borderRadius:8,border:`1px solid ${viewTrip===t.id?C.accent:C.border}`,background:viewTrip===t.id?C.accentL:"transparent",color:viewTrip===t.id?C.accent:C.t2,fontSize:13,cursor:"pointer",fontWeight:500,display:"flex",alignItems:"center",gap:6}}>
+                <span>{flags[t.country]||"🌍"}</span>
+                <span>{t.destination}</span>
+                <span style={{background:C.accent,color:"#fff",borderRadius:100,padding:"1px 7px",fontSize:10}}>{pax.length}</span>
+              </button>
+            );
+          })}
+          {trips.filter(t=>passengers.some(p=>p.tripId===t.id)).length===0&&
+            <div style={{fontSize:13,color:C.t3,padding:"8px 0"}}>Sin pasajeros cargados aún. Agregá pasajeros para ver la lista por viaje.</div>
+          }
         </div>
         {viewTrip&&(()=>{
           const trip=trips.find(t=>t.id===viewTrip);const pax=passengers.filter(p=>p.tripId===viewTrip);
@@ -637,27 +646,27 @@ function Pasajeros({data,setData}){
           <FInput required label="DNI (obligatorio)" value={form.dni} onChange={v=>setForm(f=>({...f,dni:v}))} placeholder="Sin DNI no se puede agregar"/>
           <FInput label="Teléfono" value={form.phone} onChange={v=>setForm(f=>({...f,phone:v}))}/>
           <FInput label="Email" type="email" value={form.email} onChange={v=>setForm(f=>({...f,email:v}))}/>
-          <div style={{display:"flex",flexDirection:"column",gap:5,gridColumn:"1/-1"}}>
-  <label style={{fontSize:12,fontWeight:500,color:C.t2}}>Viaje existente *</label>
-  <select value={form.tripId} onChange={e=>setForm(f=>({...f,tripId:e.target.value,newDestino:""}))}
-    style={{padding:"9px 13px",border:`1px solid ${!form.tripId&&!form.newDestino?"#EF4444":C.border}`,borderRadius:8,fontSize:13,color:C.t1,outline:"none",background:"#FAFAFA",width:"100%"}}>
-    <option value="">— Seleccionar viaje ya creado —</option>
-    {trips.map(t=><option key={t.id} value={t.id}>{flags[t.country]||"🌍"} {t.destination} · {dateStr(t.departure)}</option>)}
-  </select>
-  <div style={{textAlign:"center",fontSize:11,color:C.t3,padding:"4px 0"}}>— o agregar a un destino nuevo —</div>
-  <div style={{display:"grid",gridTemplateColumns:"180px 1fr",gap:8}}>
-    <select value={form.destinoGroup||""} onChange={e=>setForm(f=>({...f,destinoGroup:e.target.value,newDestino:""}))}
+          <div style={{display:"flex",flexDirection:"column",gap:6,gridColumn:"1/-1"}}>
+  <label style={{fontSize:12,fontWeight:500,color:C.t2}}>Viaje *</label>
+  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
+    <select value={form.tripId} onChange={e=>setForm(f=>({...f,tripId:e.target.value,newDestino:"",destinoGroup:""}))}
       style={{padding:"9px 13px",border:`1px solid ${C.border}`,borderRadius:8,fontSize:13,color:C.t1,outline:"none",background:"#FAFAFA"}}>
-      <option value="">Categoría...</option>
+      <option value="">— Viajes activos —</option>
+      {trips.map(t=><option key={t.id} value={t.id}>{flags[t.country]||"🌍"} {t.destination} · {dateStr(t.departure)}</option>)}
+    </select>
+    <select value={form.destinoGroup||""} onChange={e=>setForm(f=>({...f,destinoGroup:e.target.value,newDestino:"",tripId:""}))}
+      style={{padding:"9px 13px",border:`1px solid ${C.border}`,borderRadius:8,fontSize:13,color:C.t1,outline:"none",background:"#FAFAFA"}}>
+      <option value="">— Destino nuevo —</option>
       {ALL_DESTINOS.map(g=><option key={g.group} value={g.group}>{g.group}</option>)}
     </select>
-    <select value={form.newDestino||""} onChange={e=>setForm(f=>({...f,newDestino:e.target.value,tripId:""}))}
-      style={{padding:"9px 13px",border:`1px solid ${C.border}`,borderRadius:8,fontSize:13,color:C.t1,outline:"none",background:"#FAFAFA"}}>
-      <option value="">Seleccionar destino...</option>
-      {(ALL_DESTINOS.find(g=>g.group===form.destinoGroup)||ALL_DESTINOS[0]).items.map(d=><option key={d} value={d}>{d}</option>)}
-    </select>
   </div>
-  {form.newDestino&&<div style={{fontSize:11,color:C.accent,padding:"4px 8px",background:C.accentL,borderRadius:6}}>✈️ Se creará nota para: {form.newDestino}</div>}
+  {form.destinoGroup&&<select value={form.newDestino||""} onChange={e=>setForm(f=>({...f,newDestino:e.target.value,tripId:""}))}
+    style={{padding:"9px 13px",border:`1px solid ${C.border}`,borderRadius:8,fontSize:13,color:C.t1,outline:"none",background:"#FAFAFA",width:"100%"}}>
+    <option value="">Seleccionar destino...</option>
+    {ALL_DESTINOS.find(g=>g.group===form.destinoGroup)?.items.map(d=><option key={d} value={d}>{d}</option>)}
+  </select>}
+  {form.tripId&&<div style={{fontSize:11,color:C.grn,padding:"4px 8px",background:C.grnL,borderRadius:6}}>✈️ Viaje seleccionado: {trips.find(t=>t.id===form.tripId)?.destination}</div>}
+  {form.newDestino&&<div style={{fontSize:11,color:C.accent,padding:"4px 8px",background:C.accentL,borderRadius:6}}>📍 Destino nuevo: {form.newDestino}</div>}
 </div>
           <FSelect label="Estado pago" value={form.payment} onChange={v=>setForm(f=>({...f,payment:v}))} options={[{value:"Pendiente",label:"Pendiente"},{value:"Seña",label:"Seña"},{value:"Pagado",label:"Pagado completo"}]}/>
           <FInput label="Monto pagado (USD)" type="number" value={form.amountPaid} onChange={v=>setForm(f=>({...f,amountPaid:v}))}/>
@@ -1138,4 +1147,5 @@ export default function OrbitaTravel(){
     </div>
   );
 }
+
 
