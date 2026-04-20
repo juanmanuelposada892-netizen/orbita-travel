@@ -532,6 +532,77 @@ function Pasajeros({data,setData}){
     setShowForm(false);
   };
   const toggleCL=(pId,field)=>setData(d=>({...d,passengers:d.passengers.map(p=>p.id===pId?{...p,checklist:{...p.checklist,[field]:!p.checklist?.[field]}}:p)}));
+  const generateContratoCliente=(tripId)=>{
+    const trip=data.trips.find(t=>t.id===tripId);
+    const pax=data.passengers.filter(p=>p.tripId===tripId);
+    const win=window.open("","_blank");
+    win.document.write(`<html><head><title>Contratos ${trip?.destination}</title>
+    <style>body{font-family:Arial,sans-serif;padding:20px;font-size:12px}.contrato{page-break-after:always;border:1px solid #ccc;padding:20px;margin-bottom:20px;border-radius:4px}h2{font-size:15px;margin-bottom:10px}h3{font-size:13px;margin-bottom:8px}.firma{margin-top:40px;border-top:1px solid #999;padding-top:10px}.datos{background:#f9f9f9;padding:12px;border-radius:4px;margin:10px 0}@media print{button{display:none}.contrato{page-break-after:always}}</style>
+    </head><body>
+    <button onclick="window.print()" style="margin-bottom:20px;padding:10px 20px;background:#2563EB;color:white;border:none;border-radius:6px;cursor:pointer;font-size:14px">🖨️ Imprimir todos los contratos</button>
+    ${pax.map(p=>`
+    <div class="contrato">
+      <h2>CONTRATO DE CONFORMIDAD DE VIAJE</h2>
+      <h3>ÓRBITA TRAVEL — ${trip?.destination||""}
+</h3>
+      <div class="datos">
+        <strong>DATOS DEL PASAJERO</strong><br/>
+        Nombre completo: <strong>${p.fullName}</strong><br/>
+        DNI: ${p.dni||"_____________"}<br/>
+        Teléfono: ${p.phone||"_____________"}<br/>
+        Email: ${p.email||"_____________"}<br/>
+        Contacto emergencia: ${p.emergency||"_____________"}
+      </div>
+      <div class="datos">
+        <strong>DATOS DEL VIAJE</strong><br/>
+        Destino: <strong>${trip?.destination||""}</strong><br/>
+        Fecha salida: ${dateStr(trip?.departure)}<br/>
+        Fecha regreso: ${dateStr(trip?.returnDate)}<br/>
+        Asiento Nº: ${p.seat||"_____"}<br/>
+        Precio total: $${trip?.price||0} USD<br/>
+        Monto pagado: $${p.amountPaid||0} USD<br/>
+        Saldo pendiente: $${(trip?.price||0)-(p.amountPaid||0)} USD
+      </div>
+      <p style="margin:12px 0;font-size:11px">El pasajero declara conocer y aceptar los términos y condiciones del viaje, incluyendo políticas de cancelación, modificación y responsabilidades. La agencia no se responsabiliza por cancelaciones por causas de fuerza mayor.</p>
+      <div class="firma">
+        <div style="display:flex;gap:40px;margin-top:20px">
+          <div><div style="border-top:1px solid #333;width:200px;padding-top:6px">Firma del pasajero</div><div style="margin-top:4px;font-size:10px">${p.fullName} — DNI: ${p.dni||"_________"}</div></div>
+          <div><div style="border-top:1px solid #333;width:200px;padding-top:6px">Firma de la agencia</div><div style="margin-top:4px;font-size:10px">Órbita Travel</div></div>
+        </div>
+        <div style="margin-top:12px;font-size:10px;color:#666">Fecha: ___/___/______</div>
+      </div>
+    </div>`).join("")}
+    </body></html>`);
+    win.document.close();
+  };
+
+  const generateContratoBus=(tripId)=>{
+    const trip=data.trips.find(t=>t.id===tripId);
+    const sup=data.suppliers.find(s=>s.id===trip?.supplierId);
+    const win=window.open("","_blank");
+    win.document.write(`<html><head><title>Contrato Bus ${trip?.destination}</title>
+    <style>body{font-family:Arial,sans-serif;padding:40px;font-size:13px}h1{font-size:18px}h2{font-size:15px;margin-top:20px}.seccion{margin:16px 0;padding:14px;background:#f9f9f9;border-radius:4px;border-left:4px solid #2563EB}.firma{margin-top:60px;display:flex;gap:60px}.firma-box{border-top:1px solid #333;padding-top:8px;width:220px}@media print{button{display:none}}</style>
+    </head><body>
+    <button onclick="window.print()" style="margin-bottom:20px;padding:10px 20px;background:#2563EB;color:white;border:none;border-radius:6px;cursor:pointer">🖨️ Imprimir contrato</button>
+    <h1>CONTRATO DE SERVICIO DE TRANSPORTE</h1>
+    <p style="color:#666">Órbita Travel · Fecha: ___/___/______</p>
+    <div class="seccion"><strong>PROVEEDOR DE TRANSPORTE</strong><br/>Empresa: <strong>${sup?.company||"_____________"}</strong><br/>Contacto: ${sup?.contact||"_____________"}<br/>Teléfono: ${sup?.phone||"_____________"}<br/>Email: ${sup?.email||"_____________"}</div>
+    <div class="seccion"><strong>DETALLES DEL SERVICIO</strong><br/>Destino: <strong>${trip?.destination||""}</strong><br/>Fecha de salida: ${dateStr(trip?.departure)}<br/>Fecha de regreso: ${dateStr(trip?.returnDate)}<br/>Capacidad del vehículo: ${trip?.capacity||"___"} asientos<br/>Pasajeros confirmados: ${data.passengers.filter(p=>p.tripId===tripId).length}<br/>Guía asignado: ${trip?.guide||"Sin asignar"}</div>
+    <div class="seccion"><strong>CONDICIONES ECONÓMICAS</strong><br/>Costo acordado: <strong>$${sup?.busCost||0} USD</strong><br/>Forma de pago: _____________<br/>Fecha de pago: ___/___/______<br/>Seña: $________ USD pagada el ___/___/______</div>
+    <div class="seccion"><strong>CONDICIONES DEL SERVICIO</strong><br/>
+    □ El vehículo debe estar en perfectas condiciones mecánicas y de seguridad<br/>
+    □ El conductor debe contar con todos los permisos habilitantes<br/>
+    □ Se incluye seguro de pasajeros<br/>
+    □ El proveedor es responsable por demoras mayores a 30 minutos<br/>
+    □ Cualquier modificación debe comunicarse con 48hs de anticipación</div>
+    <div class="firma">
+      <div class="firma-box">Firma del proveedor<br/><small style="color:#666">${sup?.company||""} — ${sup?.contact||""}</small></div>
+      <div class="firma-box">Firma de la agencia<br/><small style="color:#666">Órbita Travel</small></div>
+    </div>
+    </body></html>`);
+    win.document.close();
+  };
+
   const downloadList=(tripId)=>{
     const trip=data.trips.find(t=>t.id===tripId);
     const pax=data.passengers.filter(p=>p.tripId===tripId);
@@ -647,26 +718,29 @@ function Pasajeros({data,setData}){
           <FInput label="Teléfono" value={form.phone} onChange={v=>setForm(f=>({...f,phone:v}))}/>
           <FInput label="Email" type="email" value={form.email} onChange={v=>setForm(f=>({...f,email:v}))}/>
           <div style={{display:"flex",flexDirection:"column",gap:6,gridColumn:"1/-1"}}>
-  <label style={{fontSize:12,fontWeight:500,color:C.t2}}>Viaje *</label>
-  <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
-    <select value={form.tripId} onChange={e=>setForm(f=>({...f,tripId:e.target.value,newDestino:"",destinoGroup:""}))}
-      style={{padding:"9px 13px",border:`1px solid ${C.border}`,borderRadius:8,fontSize:13,color:C.t1,outline:"none",background:"#FAFAFA"}}>
-      <option value="">— Viajes activos —</option>
-      {trips.map(t=><option key={t.id} value={t.id}>{flags[t.country]||"🌍"} {t.destination} · {dateStr(t.departure)}</option>)}
-    </select>
+  <label style={{fontSize:12,fontWeight:500,color:C.t2}}>Destino / Viaje *</label>
+  <div style={{display:"grid",gridTemplateColumns:"180px 1fr",gap:8}}>
     <select value={form.destinoGroup||""} onChange={e=>setForm(f=>({...f,destinoGroup:e.target.value,newDestino:"",tripId:""}))}
       style={{padding:"9px 13px",border:`1px solid ${C.border}`,borderRadius:8,fontSize:13,color:C.t1,outline:"none",background:"#FAFAFA"}}>
-      <option value="">— Destino nuevo —</option>
+      <option value="">Categoría...</option>
+      <option value="__activos__">✈️ Viajes activos</option>
       {ALL_DESTINOS.map(g=><option key={g.group} value={g.group}>{g.group}</option>)}
     </select>
+    <select value={form.tripId||form.newDestino||""} onChange={e=>{
+      const val=e.target.value;
+      const isTrip=trips.find(t=>t.id===val);
+      if(isTrip) setForm(f=>({...f,tripId:val,newDestino:""}));
+      else setForm(f=>({...f,newDestino:val,tripId:""}));
+    }} style={{padding:"9px 13px",border:`1px solid ${(!form.tripId&&!form.newDestino)?"#EF4444":C.border}`,borderRadius:8,fontSize:13,color:C.t1,outline:"none",background:"#FAFAFA"}}>
+      <option value="">Seleccionar...</option>
+      {form.destinoGroup==="__activos__"
+        ? trips.map(t=><option key={t.id} value={t.id}>{flags[t.country]||"🌍"} {t.destination} · {dateStr(t.departure)}</option>)
+        : ALL_DESTINOS.find(g=>g.group===form.destinoGroup)?.items.map(d=><option key={d} value={d}>{d}</option>)||[]
+      }
+    </select>
   </div>
-  {form.destinoGroup&&<select value={form.newDestino||""} onChange={e=>setForm(f=>({...f,newDestino:e.target.value,tripId:""}))}
-    style={{padding:"9px 13px",border:`1px solid ${C.border}`,borderRadius:8,fontSize:13,color:C.t1,outline:"none",background:"#FAFAFA",width:"100%"}}>
-    <option value="">Seleccionar destino...</option>
-    {ALL_DESTINOS.find(g=>g.group===form.destinoGroup)?.items.map(d=><option key={d} value={d}>{d}</option>)}
-  </select>}
-  {form.tripId&&<div style={{fontSize:11,color:C.grn,padding:"4px 8px",background:C.grnL,borderRadius:6}}>✈️ Viaje seleccionado: {trips.find(t=>t.id===form.tripId)?.destination}</div>}
-  {form.newDestino&&<div style={{fontSize:11,color:C.accent,padding:"4px 8px",background:C.accentL,borderRadius:6}}>📍 Destino nuevo: {form.newDestino}</div>}
+  {form.tripId&&<div style={{fontSize:11,color:C.grn,padding:"4px 8px",background:C.grnL,borderRadius:6}}>✈️ {trips.find(t=>t.id===form.tripId)?.destination} · {dateStr(trips.find(t=>t.id===form.tripId)?.departure)}</div>}
+  {form.newDestino&&<div style={{fontSize:11,color:C.accent,padding:"4px 8px",background:C.accentL,borderRadius:6}}>📍 Destino: {form.newDestino}</div>}
 </div>
           <FSelect label="Estado pago" value={form.payment} onChange={v=>setForm(f=>({...f,payment:v}))} options={[{value:"Pendiente",label:"Pendiente"},{value:"Seña",label:"Seña"},{value:"Pagado",label:"Pagado completo"}]}/>
           <FInput label="Monto pagado (USD)" type="number" value={form.amountPaid} onChange={v=>setForm(f=>({...f,amountPaid:v}))}/>
@@ -676,8 +750,8 @@ function Pasajeros({data,setData}){
         </div>
         <div style={{display:"flex",gap:8,marginTop:14}}><Btn onClick={addPassenger}>Agregar pasajero</Btn><Btn variant="secondary" onClick={()=>setShowForm(false)}>Cancelar</Btn></div>
       </Card>}
-      <Card style={{padding:0}}>
-        <Table headers={["Pasajero","DNI","Teléfono","Viaje","Asiento","Pago","Pagado","Saldo","Check"]} rows={filtered.map(p=>{const trip=trips.find(t=>t.id===p.tripId);const pending=pendingAmount(p);const checks=p.checklist||{};const done=[checks.dni,checks.pago,checks.seguro,checks.contrato].filter(Boolean).length;return[<div><div style={{fontWeight:500}}>{p.fullName}</div>{p.email&&<div style={{fontSize:11,color:C.t3}}>{p.email}</div>}</div>,p.dni?p.dni:<span style={{color:C.red,fontWeight:600}}>⚠ FALTA</span>,p.phone||"-",<div style={{fontSize:12}}>{flags[trip?.country]||"🌍"} {trip?.destination||"-"}</div>,p.seat||"-",<Badge bg={PAY_COLOR[p.payment]?.bg} text={PAY_COLOR[p.payment]?.text}>{p.payment}</Badge>,<span style={{fontWeight:500}}>{usd(p.amountPaid)}</span>,<span style={{color:pending>0?C.red:C.grn,fontWeight:600}}>{pending>0?usd(pending):"✓"}</span>,<span style={{fontSize:12,color:done===4?C.grn:done>=2?C.yel:C.red}}>{done}/4 ✓</span>];})}/>
+      <Card style={{padding:0}} key={passengers.length}>
+        <Table headers={["Pasajero","DNI","Teléfono","Viaje","Asiento","Pago","Pagado","Saldo","Check"]} rows={filtered.map(p=>{const trip=trips.find(t=>t.id===p.tripId);const pending=pendingAmount(p);const checks=p.checklist||{};const done=[checks.dni,checks.pago,checks.seguro,checks.contrato].filter(Boolean).length;const destino=p.notes?.startsWith("Destino nuevo:")?p.notes.split(":")[1]?.split(".")[0]?.trim():"";return[<div><div style={{fontWeight:500}}>{p.fullName}</div>{p.email&&<div style={{fontSize:11,color:C.t3}}>{p.email}</div>}</div>,p.dni?p.dni:<span style={{color:C.red,fontWeight:600}}>⚠ FALTA</span>,p.phone||"-",<div style={{fontSize:12}}>{trip?<>{flags[trip?.country]||"🌍"} {trip?.destination}</>:destino?<span style={{color:C.accent}}>📍 {destino}</span>:"-"}</div>,p.seat||"-",<Badge bg={PAY_COLOR[p.payment]?.bg} text={PAY_COLOR[p.payment]?.text}>{p.payment}</Badge>,<span style={{fontWeight:500}}>{usd(p.amountPaid)}</span>,<span style={{color:pending>0?C.red:C.grn,fontWeight:600}}>{pending>0?usd(pending):"✓"}</span>,<span style={{fontSize:12,color:done===4?C.grn:done>=2?C.yel:C.red}}>{done}/4 ✓</span>];})}/>
       </Card>
     </div>
   );
@@ -685,8 +759,8 @@ function Pasajeros({data,setData}){
 
 function Ventas({data,setData}){
   const {sales,trips}=data;
-  const [form,setForm]=useState({date:new Date().toISOString().split("T")[0],channel:"Instagram",seller:"Juan",amount:"",tripId:"",concept:""});
-  const addSale=()=>{if(!form.tripId||!form.amount||!form.date)return;const newS={id:`V-${String(sales.length+1).padStart(3,"0")}`,...form,amount:Number(form.amount)};setData(d=>({...d,sales:[newS,...d.sales]}));setForm(f=>({...f,amount:"",concept:"",tripId:""}));};
+  const [form,setForm]=useState({date:new Date().toISOString().split("T")[0],channel:"Instagram",seller:"Juan",amount:"",tripId:"",concept:"",metodoPago:"Efectivo"});
+  const addSale=()=>{if(!form.tripId||!form.amount||!form.date)return;const newS={id:`V-${String(sales.length+1).padStart(3,"0")}`,...form,amount:Number(form.amount)};setData(d=>({...d,sales:[newS,...d.sales]}));setForm(f=>({...f,amount:"",concept:"",tripId:"",metodoPago:"Efectivo"}));};
   const byChannel=["Instagram","WhatsApp","Ads","Referido","Oficina"].map(ch=>({ch,total:sales.filter(s=>s.channel===ch).reduce((a,s)=>a+s.amount,0),count:sales.filter(s=>s.channel===ch).length}));
   const totalSales=sales.reduce((a,s)=>a+s.amount,0);
   return(
@@ -695,9 +769,9 @@ function Ventas({data,setData}){
       <div style={{display:"grid",gridTemplateColumns:"1fr 300px",gap:16,alignItems:"start"}}>
         <div style={{display:"flex",flexDirection:"column",gap:12}}>
           <Card><div style={{fontSize:14,fontWeight:600,color:C.t1,marginBottom:14}}>Por canal</div><div style={{display:"flex",flexDirection:"column",gap:10}}>{byChannel.filter(c=>c.total>0).map(c=><div key={c.ch} style={{display:"flex",alignItems:"center",gap:12}}><div style={{width:90,fontSize:12,color:C.t2}}>{c.ch}</div><div style={{flex:1}}><ProgressBar pct={totalSales?c.total/totalSales*100:0}/></div><div style={{fontSize:12,color:C.t1,fontWeight:600,width:60,textAlign:"right"}}>{usd(c.total)}</div><div style={{fontSize:11,color:C.t3,width:20,textAlign:"right"}}>{c.count}</div></div>)}</div></Card>
-          <Card style={{padding:0}}><Table headers={["Fecha","Canal","Vendedor","Viaje","Concepto","Monto"]} rows={sales.map(s=>{const trip=trips.find(t=>t.id===s.tripId);return[dateStr(s.date),<Badge bg={C.accentL} text={C.accent}>{s.channel}</Badge>,s.seller,<span style={{fontSize:12}}>{flags[trip?.country]||"🌍"} {trip?.destination||"-"}</span>,<span style={{fontSize:12,color:C.t2}}>{s.concept||"-"}</span>,<span style={{fontWeight:600,color:C.grn}}>{usd(s.amount)}</span>];})}/></Card>
+          <Card style={{padding:0}}><Table headers={["Fecha","Canal","Método","Vendedor","Viaje","Concepto","Monto"]} rows={sales.map(s=>{const trip=trips.find(t=>t.id===s.tripId);const metodoIcon={"Efectivo":"💵","Transferencia":"🏦","Tarjeta débito":"💳","Tarjeta crédito":"💳","MercadoPago":"📱","Cheque":"📝"};return[dateStr(s.date),<Badge bg={C.accentL} text={C.accent}>{s.channel}</Badge>,<span style={{fontSize:12}}>{metodoIcon[s.metodoPago]||"💵"} {s.metodoPago||"Efectivo"}</span>,s.seller,<span style={{fontSize:12}}>{flags[trip?.country]||"🌍"} {trip?.destination||"-"}</span>,<span style={{fontSize:12,color:C.t2}}>{s.concept||"-"}</span>,<span style={{fontWeight:600,color:C.grn}}>{usd(s.amount)}</span>];})}/></Card>
         </div>
-        <Card><div style={{fontSize:15,fontWeight:600,color:C.t1,marginBottom:16}}>Registrar venta</div><div style={{display:"flex",flexDirection:"column",gap:12}}><FInput label="Fecha" type="date" value={form.date} onChange={v=>setForm(f=>({...f,date:v}))}/><FSelect label="Canal" value={form.channel} onChange={v=>setForm(f=>({...f,channel:v}))} options={["Instagram","WhatsApp","Ads","Referido","Oficina"].map(c=>({value:c,label:c}))}/><FSelect label="Vendedor" value={form.seller} onChange={v=>setForm(f=>({...f,seller:v}))} options={INIT.team.map(u=>({value:u.name,label:u.name}))}/><FSelect required label="Viaje" value={form.tripId} onChange={v=>setForm(f=>({...f,tripId:v}))} options={trips.map(t=>({value:t.id,label:t.destination}))}/><FInput label="Concepto" value={form.concept} onChange={v=>setForm(f=>({...f,concept:v}))} placeholder="Asiento completo, seña..."/><FInput required label="Monto (USD)" type="number" value={form.amount} onChange={v=>setForm(f=>({...f,amount:v}))}/><Btn onClick={addSale}>Registrar venta</Btn></div></Card>
+        <Card><div style={{fontSize:15,fontWeight:600,color:C.t1,marginBottom:16}}>Registrar venta</div><div style={{display:"flex",flexDirection:"column",gap:12}}><FInput label="Fecha" type="date" value={form.date} onChange={v=>setForm(f=>({...f,date:v}))}/><FSelect label="Canal" value={form.channel} onChange={v=>setForm(f=>({...f,channel:v}))} options={["Instagram","WhatsApp","Ads","Referido","Oficina"].map(c=>({value:c,label:c}))}/><FSelect label="Vendedor" value={form.seller} onChange={v=>setForm(f=>({...f,seller:v}))} options={INIT.team.map(u=>({value:u.name,label:u.name}))}/><FSelect required label="Viaje" value={form.tripId} onChange={v=>setForm(f=>({...f,tripId:v}))} options={trips.map(t=>({value:t.id,label:t.destination}))}/><FInput label="Concepto" value={form.concept} onChange={v=>setForm(f=>({...f,concept:v}))} placeholder="Asiento completo, seña..."/><FSelect label="Método de pago" value={form.metodoPago||"Efectivo"} onChange={v=>setForm(f=>({...f,metodoPago:v}))} options={[{value:"Efectivo",label:"💵 Efectivo"},{value:"Transferencia",label:"🏦 Transferencia"},{value:"Tarjeta débito",label:"💳 Tarjeta débito"},{value:"Tarjeta crédito",label:"💳 Tarjeta crédito"},{value:"MercadoPago",label:"📱 MercadoPago"},{value:"Cheque",label:"📝 Cheque"}]}/><FInput required label="Monto (USD)" type="number" value={form.amount} onChange={v=>setForm(f=>({...f,amount:v}))}/><Btn onClick={addSale}>Registrar venta</Btn></div></Card>
       </div>
     </div>
   );
@@ -796,6 +870,77 @@ function Tareas({data,setData}){
 function Documentos({data}){
   const {trips,passengers}=data;
   const pendingAmount=(p)=>{const t=trips.find(tr=>tr.id===p.tripId);return(t?.price||0)-p.amountPaid;};
+  const generateContratoCliente=(tripId)=>{
+    const trip=data.trips.find(t=>t.id===tripId);
+    const pax=data.passengers.filter(p=>p.tripId===tripId);
+    const win=window.open("","_blank");
+    win.document.write(`<html><head><title>Contratos ${trip?.destination}</title>
+    <style>body{font-family:Arial,sans-serif;padding:20px;font-size:12px}.contrato{page-break-after:always;border:1px solid #ccc;padding:20px;margin-bottom:20px;border-radius:4px}h2{font-size:15px;margin-bottom:10px}h3{font-size:13px;margin-bottom:8px}.firma{margin-top:40px;border-top:1px solid #999;padding-top:10px}.datos{background:#f9f9f9;padding:12px;border-radius:4px;margin:10px 0}@media print{button{display:none}.contrato{page-break-after:always}}</style>
+    </head><body>
+    <button onclick="window.print()" style="margin-bottom:20px;padding:10px 20px;background:#2563EB;color:white;border:none;border-radius:6px;cursor:pointer;font-size:14px">🖨️ Imprimir todos los contratos</button>
+    ${pax.map(p=>`
+    <div class="contrato">
+      <h2>CONTRATO DE CONFORMIDAD DE VIAJE</h2>
+      <h3>ÓRBITA TRAVEL — ${trip?.destination||""}
+</h3>
+      <div class="datos">
+        <strong>DATOS DEL PASAJERO</strong><br/>
+        Nombre completo: <strong>${p.fullName}</strong><br/>
+        DNI: ${p.dni||"_____________"}<br/>
+        Teléfono: ${p.phone||"_____________"}<br/>
+        Email: ${p.email||"_____________"}<br/>
+        Contacto emergencia: ${p.emergency||"_____________"}
+      </div>
+      <div class="datos">
+        <strong>DATOS DEL VIAJE</strong><br/>
+        Destino: <strong>${trip?.destination||""}</strong><br/>
+        Fecha salida: ${dateStr(trip?.departure)}<br/>
+        Fecha regreso: ${dateStr(trip?.returnDate)}<br/>
+        Asiento Nº: ${p.seat||"_____"}<br/>
+        Precio total: $${trip?.price||0} USD<br/>
+        Monto pagado: $${p.amountPaid||0} USD<br/>
+        Saldo pendiente: $${(trip?.price||0)-(p.amountPaid||0)} USD
+      </div>
+      <p style="margin:12px 0;font-size:11px">El pasajero declara conocer y aceptar los términos y condiciones del viaje, incluyendo políticas de cancelación, modificación y responsabilidades. La agencia no se responsabiliza por cancelaciones por causas de fuerza mayor.</p>
+      <div class="firma">
+        <div style="display:flex;gap:40px;margin-top:20px">
+          <div><div style="border-top:1px solid #333;width:200px;padding-top:6px">Firma del pasajero</div><div style="margin-top:4px;font-size:10px">${p.fullName} — DNI: ${p.dni||"_________"}</div></div>
+          <div><div style="border-top:1px solid #333;width:200px;padding-top:6px">Firma de la agencia</div><div style="margin-top:4px;font-size:10px">Órbita Travel</div></div>
+        </div>
+        <div style="margin-top:12px;font-size:10px;color:#666">Fecha: ___/___/______</div>
+      </div>
+    </div>`).join("")}
+    </body></html>`);
+    win.document.close();
+  };
+
+  const generateContratoBus=(tripId)=>{
+    const trip=data.trips.find(t=>t.id===tripId);
+    const sup=data.suppliers.find(s=>s.id===trip?.supplierId);
+    const win=window.open("","_blank");
+    win.document.write(`<html><head><title>Contrato Bus ${trip?.destination}</title>
+    <style>body{font-family:Arial,sans-serif;padding:40px;font-size:13px}h1{font-size:18px}h2{font-size:15px;margin-top:20px}.seccion{margin:16px 0;padding:14px;background:#f9f9f9;border-radius:4px;border-left:4px solid #2563EB}.firma{margin-top:60px;display:flex;gap:60px}.firma-box{border-top:1px solid #333;padding-top:8px;width:220px}@media print{button{display:none}}</style>
+    </head><body>
+    <button onclick="window.print()" style="margin-bottom:20px;padding:10px 20px;background:#2563EB;color:white;border:none;border-radius:6px;cursor:pointer">🖨️ Imprimir contrato</button>
+    <h1>CONTRATO DE SERVICIO DE TRANSPORTE</h1>
+    <p style="color:#666">Órbita Travel · Fecha: ___/___/______</p>
+    <div class="seccion"><strong>PROVEEDOR DE TRANSPORTE</strong><br/>Empresa: <strong>${sup?.company||"_____________"}</strong><br/>Contacto: ${sup?.contact||"_____________"}<br/>Teléfono: ${sup?.phone||"_____________"}<br/>Email: ${sup?.email||"_____________"}</div>
+    <div class="seccion"><strong>DETALLES DEL SERVICIO</strong><br/>Destino: <strong>${trip?.destination||""}</strong><br/>Fecha de salida: ${dateStr(trip?.departure)}<br/>Fecha de regreso: ${dateStr(trip?.returnDate)}<br/>Capacidad del vehículo: ${trip?.capacity||"___"} asientos<br/>Pasajeros confirmados: ${data.passengers.filter(p=>p.tripId===tripId).length}<br/>Guía asignado: ${trip?.guide||"Sin asignar"}</div>
+    <div class="seccion"><strong>CONDICIONES ECONÓMICAS</strong><br/>Costo acordado: <strong>$${sup?.busCost||0} USD</strong><br/>Forma de pago: _____________<br/>Fecha de pago: ___/___/______<br/>Seña: $________ USD pagada el ___/___/______</div>
+    <div class="seccion"><strong>CONDICIONES DEL SERVICIO</strong><br/>
+    □ El vehículo debe estar en perfectas condiciones mecánicas y de seguridad<br/>
+    □ El conductor debe contar con todos los permisos habilitantes<br/>
+    □ Se incluye seguro de pasajeros<br/>
+    □ El proveedor es responsable por demoras mayores a 30 minutos<br/>
+    □ Cualquier modificación debe comunicarse con 48hs de anticipación</div>
+    <div class="firma">
+      <div class="firma-box">Firma del proveedor<br/><small style="color:#666">${sup?.company||""} — ${sup?.contact||""}</small></div>
+      <div class="firma-box">Firma de la agencia<br/><small style="color:#666">Órbita Travel</small></div>
+    </div>
+    </body></html>`);
+    win.document.close();
+  };
+
   const downloadList=(tripId)=>{
     const trip=data.trips.find(t=>t.id===tripId);
     const pax=data.passengers.filter(p=>p.tripId===tripId);
@@ -837,13 +982,46 @@ function Documentos({data}){
       <div><h2 style={{fontSize:22,fontWeight:700,color:C.t1,marginBottom:4}}>Documentos</h2><p style={{fontSize:13,color:C.t2}}>Manifiestos, listas imprimibles y checklists</p></div>
       <Card>
         <div style={{fontSize:14,fontWeight:600,color:C.t1,marginBottom:16}}>Lista de pasajeros por viaje</div>
+        {trips.filter(t=>passengers.some(p=>p.tripId===t.id)).length===0&&<div style={{textAlign:"center",padding:20,color:C.t3,fontSize:13}}>No hay viajes con pasajeros cargados aún.</div>}
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(240px,1fr))",gap:12}}>
-          {trips.map(t=>{const pax=passengers.filter(p=>p.tripId===t.id);const sinDni=pax.filter(p=>!p.dni).length;const sinPagar=pax.filter(p=>p.payment!=="Pagado").length;return(<div key={t.id} style={{padding:16,border:`1px solid ${C.border}`,borderRadius:10}}><div style={{fontWeight:500,fontSize:13,color:C.t1,marginBottom:4}}>{flags[t.country]||"🌍"} {t.destination}</div><div style={{fontSize:11,color:C.t3,marginBottom:6}}>{dateStr(t.departure)} · {pax.length} pasajeros</div>{sinDni>0&&<div style={{fontSize:11,color:C.red,marginBottom:4}}>⚠️ {sinDni} sin DNI</div>}{sinPagar>0&&<div style={{fontSize:11,color:C.yel,marginBottom:8}}>💰 {sinPagar} pago pendiente</div>}<div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
-  <Btn size="sm" onClick={()=>printList(t.id)} disabled={pax.length===0}>🖨️ Imprimir</Btn>
-  <Btn size="sm" variant="secondary" onClick={()=>downloadList(t.id)} disabled={pax.length===0}>⬇️ Descargar</Btn>
-</div></div>);})}
+          {trips.filter(t=>passengers.some(p=>p.tripId===t.id)).map(t=>{
+            const pax=passengers.filter(p=>p.tripId===t.id);
+            const sinDni=pax.filter(p=>!p.dni).length;
+            const sinPagar=pax.filter(p=>p.payment!=="Pagado").length;
+            return(
+              <div key={t.id} style={{padding:16,border:`1px solid ${C.border}`,borderRadius:10}}>
+                <div style={{fontWeight:500,fontSize:13,color:C.t1,marginBottom:4}}>{flags[t.country]||"🌍"} {t.destination}</div>
+                <div style={{fontSize:11,color:C.t3,marginBottom:6}}>{dateStr(t.departure)} · {pax.length} pasajeros</div>
+                {sinDni>0&&<div style={{fontSize:11,color:C.red,marginBottom:4}}>⚠️ {sinDni} sin DNI</div>}
+                {sinPagar>0&&<div style={{fontSize:11,color:C.yel,marginBottom:8}}>💰 {sinPagar} pago pendiente</div>}
+                <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+                  <Btn size="sm" onClick={()=>printList(t.id)}>🖨️ Imprimir</Btn>
+                  <Btn size="sm" variant="secondary" onClick={()=>downloadList(t.id)}>⬇️ Descargar</Btn>
+                  <Btn size="sm" variant="secondary" onClick={()=>generateContratoCliente(t.id)}>📋 Contrato</Btn>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </Card>
+      <Card>
+        <div style={{fontSize:14,fontWeight:600,color:C.t1,marginBottom:16}}>Contratos de bus por viaje</div>
+        {trips.filter(t=>t.supplierId).length===0&&<div style={{textAlign:"center",padding:20,color:C.t3,fontSize:13}}>No hay viajes con proveedor de bus asignado.</div>}
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(240px,1fr))",gap:12}}>
+          {trips.filter(t=>t.supplierId).map(t=>{
+            const sup=data.suppliers.find(s=>s.id===t.supplierId);
+            return(
+              <div key={t.id} style={{padding:16,border:`1px solid ${C.border}`,borderRadius:10}}>
+                <div style={{fontWeight:500,fontSize:13,color:C.t1,marginBottom:4}}>{flags[t.country]||"🌍"} {t.destination}</div>
+                <div style={{fontSize:11,color:C.t3,marginBottom:4}}>{dateStr(t.departure)} · 🚌 {sup?.company||"-"}</div>
+                <div style={{fontSize:11,color:C.t2,marginBottom:8}}>💵 {usd(sup?.busCost||0)}</div>
+                <Btn size="sm" variant="secondary" onClick={()=>generateContratoBus(t.id)}>📄 Contrato bus</Btn>
+              </div>
+            );
+          })}
+        </div>
+      </Card>
+
       <Card>
         <div style={{fontSize:14,fontWeight:600,color:C.t1,marginBottom:14}}>Checklist operativo por viaje</div>
         {trips.map(t=>(
