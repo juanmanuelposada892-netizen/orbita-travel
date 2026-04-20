@@ -1,3 +1,4 @@
+
 import { useState, useMemo, useEffect } from "react";
 
 // ═══════════════════════════════════════════════════════
@@ -1038,10 +1039,56 @@ function Documentos({ data }) {
   );
 }
 
+// ── LOGIN ─────────────────────────────────────────────
+function Login({ onLogin }) {
+  const [pass, setPass] = useState("");
+  const [error, setError] = useState(false);
+  const [show, setShow] = useState(false);
+
+  const handle = () => {
+    if(pass === "JuanLucasalmundo26") {
+      localStorage.setItem("orbita_auth", "1");
+      onLogin();
+    } else {
+      setError(true);
+      setTimeout(() => setError(false), 2000);
+    }
+  };
+
+  return (
+    <div style={{ minHeight:"100vh", background:"#0F1117", display:"flex", alignItems:"center", justifyContent:"center", fontFamily:"system-ui,-apple-system,sans-serif" }}>
+      <div style={{ background:"#1A1D27", border:"1px solid #2A2D3E", borderRadius:16, padding:40, width:360, textAlign:"center" }}>
+        <div style={{ fontSize:36, marginBottom:8 }}>🌍</div>
+        <div style={{ fontSize:22, fontWeight:800, color:"#FFFFFF", letterSpacing:"-.04em", marginBottom:4 }}>ÓRBITA TRAVEL</div>
+        <div style={{ fontSize:12, color:"#9A9CAD", marginBottom:32, textTransform:"uppercase", letterSpacing:".06em" }}>Acceso privado</div>
+        <div style={{ position:"relative", marginBottom:16 }}>
+          <input
+            type={show?"text":"password"}
+            value={pass}
+            onChange={e=>setPass(e.target.value)}
+            onKeyDown={e=>e.key==="Enter"&&handle()}
+            placeholder="Contraseña"
+            style={{ width:"100%", padding:"12px 44px 12px 16px", background:"#0F1117", border:`1px solid ${error?"#DC2626":"#2A2D3E"}`, borderRadius:8, fontSize:14, color:"#FFFFFF", outline:"none", boxSizing:"border-box", transition:"border-color .2s" }}
+          />
+          <button onClick={()=>setShow(s=>!s)} style={{ position:"absolute", right:12, top:"50%", transform:"translateY(-50%)", background:"none", border:"none", cursor:"pointer", fontSize:16, color:"#9A9CAD" }}>{show?"🙈":"👁️"}</button>
+        </div>
+        {error && <div style={{ fontSize:12, color:"#DC2626", marginBottom:12 }}>Contraseña incorrecta</div>}
+        <button onClick={handle} style={{ width:"100%", padding:"12px", background:"#2563EB", color:"#fff", border:"none", borderRadius:8, fontSize:14, fontWeight:600, cursor:"pointer", transition:"background .2s" }}>
+          Ingresar →
+        </button>
+        <div style={{ fontSize:11, color:"#444", marginTop:20 }}>Uso interno · Órbita Travel</div>
+      </div>
+    </div>
+  );
+}
+
 // ── APP ROOT ──────────────────────────────────────────
 export default function OrbitaTravel() {
   const [active, setActive] = useState("dashboard");
   const [data, setData] = useState(INIT);
+  const [auth, setAuth] = useState(!!localStorage.getItem("orbita_auth"));
+
+  if(!auth) return <Login onLogin={()=>setAuth(true)}/>;
 
   const screens = {
     dashboard: <Dashboard data={data}/>,
