@@ -53,6 +53,111 @@ const INIT = {
   ],
 };
 
+
+// ── DESTINOS ─────────────────────────────────────────
+const DESTINOS_NAC = [
+  // Buenos Aires
+  "Buenos Aires - Capital Federal","Buenos Aires - Mar del Plata","Buenos Aires - La Plata","Buenos Aires - Tandil","Buenos Aires - Pinamar","Buenos Aires - Villa Gesell","Buenos Aires - Miramar","Buenos Aires - Necochea","Buenos Aires - Bahía Blanca","Buenos Aires - San Antonio de Areco",
+  // Córdoba
+  "Córdoba - Ciudad","Córdoba - Carlos Paz","Córdoba - Mina Clavero","Córdoba - Alta Gracia","Córdoba - Villa General Belgrano","Córdoba - Cosquín","Córdoba - La Falda","Córdoba - Capilla del Monte","Córdoba - Río Ceballos","Córdoba - Jesús María",
+  // Mendoza
+  "Mendoza - Ciudad","Mendoza - San Rafael","Mendoza - Malargüe","Mendoza - Valle de Uco","Mendoza - Luján de Cuyo","Mendoza - Las Leñas","Mendoza - Tunuyán",
+  // Salta
+  "Salta - Ciudad","Salta - Cafayate","Salta - Purmamarca","Salta - Tilcara","Salta - Humahuaca","Salta - San Antonio de los Cobres","Salta - Rosario de la Frontera",
+  // Misiones
+  "Misiones - Cataratas del Iguazú","Misiones - Posadas","Misiones - Oberá","Misiones - San Ignacio Mini","Misiones - El Dorado",
+  // Patagonia
+  "Río Negro - Bariloche","Río Negro - El Bolsón","Río Negro - San Martín de los Andes","Río Negro - Villa La Angostura",
+  "Neuquén - Neuquén Ciudad","Neuquén - Zapala","Neuquén - Cutral-Có",
+  "Chubut - Puerto Madryn","Chubut - Trelew","Chubut - Comodoro Rivadavia","Chubut - Esquel",
+  "Santa Cruz - El Calafate","Santa Cruz - El Chaltén","Santa Cruz - Río Gallegos","Santa Cruz - Puerto San Julián",
+  "Tierra del Fuego - Ushuaia","Tierra del Fuego - Río Grande",
+  // Norte
+  "Jujuy - San Salvador","Jujuy - Purmamarca","Jujuy - Tilcara","Jujuy - Humahuaca",
+  "Tucumán - San Miguel","Tucumán - Tafí del Valle","Tucumán - Amaicha del Valle",
+  "Catamarca - San Fernando","Catamarca - Andalgalá","Catamarca - Belén",
+  "Santiago del Estero - La Banda","Santiago del Estero - Termas de Río Hondo",
+  "La Rioja - Ciudad","La Rioja - Chilecito","La Rioja - Parque Nacional Talampaya",
+  // Cuyo
+  "San Juan - Ciudad","San Juan - Valle de la Luna","San Juan - Calingasta","San Juan - Difunta Correa",
+  "San Luis - Ciudad","San Luis - Merlo","San Luis - Villa de Merlo","San Luis - Potrero de los Funes",
+  // Litoral
+  "Santa Fe - Rosario","Santa Fe - Ciudad","Santa Fe - Reconquista","Santa Fe - Rafaela",
+  "Entre Ríos - Paraná","Entre Ríos - Gualeguaychú","Entre Ríos - Colón","Entre Ríos - Concepción del Uruguay","Entre Ríos - Federación",
+  "Corrientes - Ciudad","Corrientes - Paso de los Libres","Corrientes - Goya","Corrientes - Iberá",
+  "Chaco - Resistencia","Chaco - Presidencia Roque Sáenz Peña",
+  "Formosa - Ciudad","Formosa - Clorinda",
+  // Centro
+  "La Pampa - Santa Rosa","La Pampa - Toay",
+  // Eventos especiales
+  "Buenos Aires - Estadio Monumental","Buenos Aires - La Bombonera","Buenos Aires - San Juan (estadio)","Córdoba - Kempes","Mendoza - Estadio Malvinas","Rosario - Estadio Gigante de Arroyito",
+];
+
+const DESTINOS_INTL = [
+  // América del Sur
+  "Bolivia - La Paz","Bolivia - Santa Cruz","Bolivia - Sucre","Bolivia - Uyuni","Bolivia - Cochabamba","Bolivia - Oruro","Bolivia - Potosí",
+  "Brasil - Río de Janeiro","Brasil - São Paulo","Brasil - Salvador","Brasil - Florianópolis","Brasil - Foz do Iguaçu","Brasil - Curitiba","Brasil - Porto Alegre","Brasil - Búzios","Brasil - Fortaleza","Brasil - Recife","Brasil - Natal","Brasil - Maceió","Brasil - Manaus",
+  "Chile - Santiago","Chile - Valparaíso","Chile - San Pedro de Atacama","Chile - Torres del Paine","Chile - Puerto Varas","Chile - Pucón","Chile - Viña del Mar","Chile - Antofagasta","Chile - La Serena",
+  "Uruguay - Montevideo","Uruguay - Punta del Este","Uruguay - Colonia del Sacramento","Uruguay - Piriápolis","Uruguay - Minas",
+  "Paraguay - Asunción","Paraguay - Ciudad del Este","Paraguay - Encarnación",
+  "Perú - Lima","Perú - Cusco","Perú - Machu Picchu","Perú - Arequipa","Perú - Puno","Perú - Iquitos","Perú - Trujillo",
+  "Colombia - Bogotá","Colombia - Cartagena","Colombia - Medellín","Colombia - Santa Marta","Colombia - Cali",
+  "Ecuador - Quito","Ecuador - Guayaquil","Ecuador - Galápagos","Ecuador - Cuenca",
+  "Venezuela - Caracas","Venezuela - Isla Margarita","Venezuela - Mérida",
+  "Argentina - Destino Internacional","Guyana - Georgetown",
+  // Centroamérica y Caribe
+  "México - Ciudad de México","México - Cancún","México - Playa del Carmen","México - Los Cabos","México - Puerto Vallarta","México - Oaxaca","México - Guadalajara","México - Mérida",
+  "Cuba - La Habana","Cuba - Varadero","Cuba - Trinidad",
+  "República Dominicana - Punta Cana","República Dominicana - Santo Domingo","República Dominicana - Puerto Plata",
+  "Panamá - Ciudad de Panamá","Costa Rica - San José","Costa Rica - Guanacaste","Guatemala - Ciudad","Guatemala - Antigua","Honduras - Roatán",
+  // Europa
+  "España - Madrid","España - Barcelona","España - Sevilla","España - Valencia","España - Granada","España - Málaga","España - Bilbao","España - San Sebastián","España - Ibiza","España - Mallorca","España - Tenerife",
+  "Francia - París","Francia - Niza","Francia - Lyon","Francia - Burdeos","Francia - Marsella",
+  "Italia - Roma","Italia - Milán","Italia - Venecia","Italia - Florencia","Italia - Nápoles","Italia - Sicilia","Italia - Amalfi",
+  "Portugal - Lisboa","Portugal - Porto","Portugal - Algarve","Portugal - Sintra",
+  "Alemania - Berlín","Alemania - Múnich","Alemania - Hamburgo","Alemania - Frankfurt",
+  "Reino Unido - Londres","Reino Unido - Edimburgo","Reino Unido - Manchester",
+  "Países Bajos - Ámsterdam","Bélgica - Bruselas","Suiza - Ginebra","Suiza - Zúrich","Austria - Viena","República Checa - Praga","Hungría - Budapest","Polonia - Cracovia","Grecia - Atenas","Grecia - Santorini","Grecia - Mykonos","Croacia - Dubrovnik","Turquía - Estambul","Turquía - Capadocia","Rusia - Moscú","Rusia - San Petersburgo",
+  // Asia y Oceanía
+  "Japón - Tokio","Japón - Osaka","Japón - Kioto","China - Pekín","China - Shanghái","Tailandia - Bangkok","Tailandia - Phuket","Indonesia - Bali","Vietnam - Hanói","Vietnam - Ho Chi Minh","India - Nueva Delhi","India - Mumbai","India - Goa","Emiratos Árabes - Dubái","Emiratos Árabes - Abu Dabi",
+  "Australia - Sídney","Australia - Melbourne","Nueva Zelanda - Auckland",
+  // África y otros
+  "Marruecos - Marrakech","Marruecos - Casablanca","Egipto - El Cairo","Sudáfrica - Ciudad del Cabo",
+  "Estados Unidos - Nueva York","Estados Unidos - Miami","Estados Unidos - Las Vegas","Estados Unidos - Orlando","Estados Unidos - Los Ángeles","Estados Unidos - Chicago","Canadá - Toronto","Canadá - Vancouver","Canadá - Montreal",
+];
+
+const DESTINOS_EVENTOS = [
+  "Recital - Buenos Aires (Estadio River)","Recital - Buenos Aires (La Bombonera)","Recital - Córdoba (Kempes)","Recital - Rosario","Recital - Mendoza",
+  "Partido - River vs Boca (Monumental)","Partido - Boca vs River (Bombonera)","Partido - Selección Argentina","Partido - Racing Club","Partido - San Lorenzo","Partido - Independiente","Partido - Huracán","Partido - Vélez","Partido - Talleres Córdoba","Partido - Belgrano Córdoba",
+  "Festival - Cosquín Rock","Festival - Lollapalooza Argentina","Festival - Creamfields","Festival - Personal Fest","Carnaval - Gualeguaychú","Carnaval - Corrientes","Carnaval - Río de Janeiro","Vendimia - Mendoza","Fiesta Nacional del Sol - San Juan",
+];
+
+const ALL_DESTINOS = [
+  {group:"🇦🇷 Nacional", items:DESTINOS_NAC},
+  {group:"🌍 Internacional", items:DESTINOS_INTL},
+  {group:"🎵 Eventos / Recitales / Partidos", items:DESTINOS_EVENTOS},
+];
+
+// ── FERIADOS ARGENTINA 2026 ───────────────────────────
+const FERIADOS_2026 = [
+  {date:"2026-01-01",name:"Año Nuevo",tipo:"inamovible"},
+  {date:"2026-02-16",name:"Carnaval",tipo:"puente"},
+  {date:"2026-02-17",name:"Carnaval",tipo:"puente"},
+  {date:"2026-03-24",name:"Día de la Memoria",tipo:"inamovible"},
+  {date:"2026-04-02",name:"Malvinas",tipo:"inamovible"},
+  {date:"2026-04-03",name:"Viernes Santo",tipo:"inamovible"},
+  {date:"2026-05-01",name:"Día del Trabajador",tipo:"inamovible"},
+  {date:"2026-05-25",name:"Revolución de Mayo",tipo:"inamovible"},
+  {date:"2026-06-15",name:"Paso a la Inmortalidad de Güemes",tipo:"inamovible"},
+  {date:"2026-06-20",name:"Día de la Bandera",tipo:"inamovible"},
+  {date:"2026-07-09",name:"Día de la Independencia",tipo:"inamovible"},
+  {date:"2026-08-17",name:"San Martín",tipo:"inamovible"},
+  {date:"2026-10-12",name:"Día de la Diversidad",tipo:"inamovible"},
+  {date:"2026-11-20",name:"Día de la Soberanía",tipo:"inamovible"},
+  {date:"2026-12-08",name:"Inmaculada Concepción",tipo:"inamovible"},
+  {date:"2026-12-25",name:"Navidad",tipo:"inamovible"},
+];
+
 const usd=(v)=>`$${Number(v||0).toLocaleString("es-AR",{maximumFractionDigits:0})}`;
 const dateStr=(d)=>d?new Date(d+"T12:00:00").toLocaleDateString("es-AR",{day:"2-digit",month:"short",year:"numeric"}):"-";
 const daysLeft=(d)=>{if(!d)return null;return Math.ceil((new Date(d+"T12:00:00")-new Date())/86400000);};
@@ -61,22 +166,54 @@ const STATUS_COLOR={"En venta":{bg:"#F0FDF4",text:"#16A34A"},"Planificación":{b
 const PAY_COLOR={"Pagado":{bg:"#F0FDF4",text:"#16A34A"},"Seña":{bg:"#FFFBEB",text:"#D97706"},"Pendiente":{bg:"#FEF2F2",text:"#DC2626"}};
 
 function generarAlertas(data){
-  const a=[];
+  const alerts=[];
+  const today=new Date();
+  const tripMap=Object.fromEntries(data.trips.map(t=>[t.id,t]));
+  const supMap=Object.fromEntries(data.suppliers.map(s=>[s.id,s]));
+
   data.trips.forEach(t=>{
-    if(!t.supplierId) a.push({tipo:"error",msg:`🚨 ${t.destination}: sin proveedor asignado`,mod:"viajes"});
-    if(t.sold<t.minPax&&t.status==="En venta") a.push({tipo:"warn",msg:`⚠️ ${t.destination}: no cubre mínimo (${t.sold}/${t.minPax} pax)`,mod:"viajes"});
-    const sup=data.suppliers.find(s=>s.id===t.supplierId);
-    if(sup?.availability==="Consultar") a.push({tipo:"warn",msg:`⚠️ ${t.destination}: proveedor requiere confirmación`,mod:"proveedores"});
-    const days=daysLeft(t.departure);
-    if(days!==null&&days<=7&&days>=0&&!["Finalizado","Cancelado"].includes(t.status)) a.push({tipo:"error",msg:`🔴 ${t.destination}: sale en ${days} días — revisá todo`,mod:"viajes"});
+    const dep=new Date(t.departure+"T12:00:00");
+    const days=Math.ceil((dep-today)/86400000);
+    const sup=supMap[t.supplierId];
+    const busCost=sup?.busCost||0;
+    const rev=t.sold*t.price;
+    const cost=busCost+(t.hotelCost||0)+(t.extrasCost||0);
+    const profit=rev-cost;
+    const breakEven=t.price?Math.ceil(cost/t.price):0;
+    const occ=t.capacity?Math.round(t.sold/t.capacity*100):0;
+
+    if(!t.supplierId) alerts.push({id:`trip-sup-${t.id}`,type:"operativo",level:"alta",title:"Sin proveedor",message:`${t.destination} no tiene proveedor asignado`,tripId:t.id,owner:"Lucas",resolved:false});
+    if((t.guide==="Sin asignar"||!t.guide)&&days<=7&&days>=0) alerts.push({id:`trip-guide-${t.id}`,type:"operativo",level:"alta",title:"Sin guía asignado",message:`${t.destination} sale en ${days} días sin guía`,tripId:t.id,owner:"Lucas",resolved:false});
+    if(!t.insurance) alerts.push({id:`trip-ins-${t.id}`,type:"legal",level:"alta",title:"Sin seguro de viaje",message:`${t.destination} no tiene seguro activo`,tripId:t.id,owner:"Lucas",resolved:false});
+    if(t.sold<t.minPax&&days<=10&&days>=0&&t.status==="En venta") alerts.push({id:`trip-minpax-${t.id}`,type:"financiero",level:"alta",title:"No cubre mínimo",message:`${t.destination}: ${t.sold}/${t.minPax} pax mínimos`,tripId:t.id,owner:"Juan",resolved:false});
+    if(profit<0) alerts.push({id:`trip-profit-${t.id}`,type:"financiero",level:"alta",title:"Viaje en pérdida",message:`${t.destination} proyecta ${usd(profit)}`,tripId:t.id,owner:"Juan",resolved:false});
+    if(t.sold<breakEven&&days<=10&&days>=0) alerts.push({id:`trip-be-${t.id}`,type:"financiero",level:"alta",title:"Break-even no alcanzado",message:`${t.destination} necesita ${breakEven} pax, tiene ${t.sold}`,tripId:t.id,owner:"Juan",resolved:false});
+    if(t.status==="En venta"&&occ<40&&days<=14&&days>=0) alerts.push({id:`trip-sales-${t.id}`,type:"comercial",level:"media",title:"Venta lenta",message:`${t.destination}: solo ${occ}% ocupación`,tripId:t.id,owner:"Juan",resolved:false});
+    if(sup?.availability==="Consultar") alerts.push({id:`trip-suppav-${t.id}`,type:"operativo",level:"media",title:"Proveedor a confirmar",message:`${t.destination}: proveedor ${sup.company} requiere confirmación`,tripId:t.id,owner:"Lucas",resolved:false});
   });
+
   data.passengers.forEach(p=>{
-    if(!p.dni) a.push({tipo:"error",msg:`🚨 ${p.fullName}: sin DNI cargado`,mod:"pasajeros"});
-    if(p.payment==="Pendiente") a.push({tipo:"warn",msg:`💰 ${p.fullName}: pago pendiente`,mod:"pasajeros"});
+    const trip=tripMap[p.tripId];
+    if(!trip) return;
+    const dep=new Date(trip.departure+"T12:00:00");
+    const days=Math.ceil((dep-today)/86400000);
+    const pending=(trip.price||0)-(p.amountPaid||0);
+
+    if(!p.dni) alerts.push({id:`pax-dni-${p.id}`,type:"legal",level:"alta",title:"Pasajero sin DNI",message:`${p.fullName} no tiene DNI en ${trip.destination}`,tripId:trip.id,owner:"Juan",resolved:false});
+    if(!p.seat&&days<=3&&days>=0) alerts.push({id:`pax-seat-${p.id}`,type:"operativo",level:"media",title:"Sin asiento asignado",message:`${p.fullName} no tiene asiento para ${trip.destination}`,tripId:trip.id,owner:"Lucas",resolved:false});
+    if(pending>0&&days<=7&&days>=0) alerts.push({id:`pax-pay-${p.id}`,type:"financiero",level:days<=3?"alta":"media",title:"Saldo pendiente",message:`${p.fullName} debe ${usd(pending)} para ${trip.destination}`,tripId:trip.id,owner:"Juan",resolved:false});
+    if(trip.type==="internacional"&&!p.dni) alerts.push({id:`pax-intl-${p.id}`,type:"legal",level:"alta",title:"Doc. internacional incompleta",message:`${p.fullName} necesita documentación para ${trip.destination}`,tripId:trip.id,owner:"Juan",resolved:false});
   });
-  const totalPend=data.passengers.filter(p=>p.payment!=="Pagado").reduce((acc,p)=>{const t=data.trips.find(tr=>tr.id===p.tripId);return acc+(t?.price||0)-p.amountPaid;},0);
-  if(totalPend>0) a.push({tipo:"info",msg:`💵 Total por cobrar: ${usd(totalPend)}`,mod:"rentabilidad"});
-  return a;
+
+  data.tasks.forEach(task=>{
+    if(task.done||!task.due) return;
+    const due=new Date(task.due+"T12:00:00");
+    const days=Math.ceil((due-today)/86400000);
+    if(days<0) alerts.push({id:`task-ov-${task.id}`,type:"operativo",level:"alta",title:"Tarea vencida",message:`"${task.title}" está vencida`,tripId:task.tripId,owner:task.assignee,resolved:false});
+    else if(days<=2) alerts.push({id:`task-soon-${task.id}`,type:"operativo",level:"media",title:"Tarea por vencer",message:`"${task.title}" vence en ${days} día(s)`,tripId:task.tripId,owner:task.assignee,resolved:false});
+  });
+
+  return alerts;
 }
 
 function Badge({children,bg,text}){return <span style={{display:"inline-flex",alignItems:"center",gap:5,padding:"3px 10px",borderRadius:100,background:bg,color:text,fontSize:11,fontWeight:600,whiteSpace:"nowrap"}}>{children}</span>;}
@@ -161,7 +298,7 @@ function AlertPanel({alertas,onNav}){
   );
 }
 
-const NAV=[{id:"dashboard",icon:"🏠",label:"Dashboard"},{id:"viajes",icon:"✈️",label:"Viajes"},{id:"pasajeros",icon:"👥",label:"Pasajeros"},{id:"ventas",icon:"💳",label:"Ventas"},{id:"gastos",icon:"📊",label:"Gastos"},{id:"proveedores",icon:"🚌",label:"Proveedores"},{id:"rentabilidad",icon:"💰",label:"Rentabilidad"},{id:"tareas",icon:"✅",label:"Tareas"},{id:"documentos",icon:"📄",label:"Documentos"}];
+const NAV=[{id:"dashboard",icon:"🏠",label:"Dashboard"},{id:"alertas",icon:"🚨",label:"Alertas"},{id:"viajes",icon:"✈️",label:"Viajes"},{id:"pasajeros",icon:"👥",label:"Pasajeros"},{id:"ventas",icon:"💳",label:"Ventas"},{id:"gastos",icon:"📊",label:"Gastos"},{id:"proveedores",icon:"🚌",label:"Proveedores"},{id:"rentabilidad",icon:"💰",label:"Rentabilidad"},{id:"tareas",icon:"✅",label:"Tareas"},{id:"calendario",icon:"📅",label:"Calendario"},{id:"documentos",icon:"📄",label:"Documentos"}];
 
 function ResetModal({onConfirm,onCancel}){
   const [secs,setSecs]=useState([]);
@@ -175,7 +312,18 @@ function ResetModal({onConfirm,onCancel}){
         <div style={{display:"flex",flexDirection:"column",gap:8,marginBottom:20}}>
           {SECS.map(s=><label key={s} style={{display:"flex",alignItems:"center",gap:10,cursor:"pointer",padding:"8px 12px",borderRadius:8,background:secs.includes(s)?C.redL:"#F9FAFB",border:`1px solid ${secs.includes(s)?C.red:C.border}`}}><input type="checkbox" checked={secs.includes(s)} onChange={()=>toggle(s)} style={{width:16,height:16}}/><span style={{fontSize:13,fontWeight:500,color:C.t1,textTransform:"capitalize"}}>{s==="todo"?"🔴 Borrar TODO":s}</span></label>)}
         </div>
-        <div style={{display:"flex",gap:8}}><Btn variant="danger" onClick={()=>secs.length&&onConfirm(secs)} disabled={!secs.length}>Confirmar reset</Btn><Btn variant="secondary" onClick={onCancel}>Cancelar</Btn></div>
+        <div style={{fontSize:11,color:C.t3,marginBottom:12,padding:"8px 10px",background:"#FEF2F2",borderRadius:6}}>⚠️ Se enviará una notificación a tu Gmail. Los datos eliminados no se pueden recuperar.</div>
+        <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+          <Btn variant="danger" onClick={()=>{
+            if(secs.length){
+              const body=encodeURIComponent(`Se borraron los siguientes datos de ÓRBITA TRAVEL:\n${secs.join(", ")}\n\nFecha: ${new Date().toLocaleString("es-AR")}\n\nEste es un aviso automático del sistema.`);
+              const subject=encodeURIComponent("⚠️ ÓRBITA TRAVEL - Datos borrados");
+              window.open(`https://mail.google.com/mail/?view=cm&to=juanmanuelposada892@gmail.com&su=${subject}&body=${body}`,"_blank");
+              onConfirm(secs);
+            }
+          }} disabled={!secs.length}>✅ Confirmar y notificar</Btn>
+          <Btn variant="secondary" onClick={onCancel}>Cancelar</Btn>
+        </div>
       </div>
     </div>
   );
@@ -201,7 +349,15 @@ function Sidebar({active,setActive,alertas}){
           <div style={{fontSize:10,color:C.sideText,marginTop:3,letterSpacing:".06em",textTransform:"uppercase"}}>Travel Management</div>
         </div>
         {alertas.length>0&&<div style={{margin:"0 4px 10px",padding:"8px 12px",background:"#DC262618",border:"1px solid #DC262633",borderRadius:8,display:"flex",alignItems:"center",gap:8}}><span style={{fontSize:14}}>🚨</span><span style={{fontSize:11,color:"#FCA5A5",fontWeight:500}}>{alertas.filter(a=>a.tipo==="error").length} err · {alertas.filter(a=>a.tipo==="warn").length} avisos</span></div>}
-        {NAV.map(n=><button key={n.id} onClick={()=>setActive(n.id)} style={{display:"flex",alignItems:"center",gap:10,padding:"9px 12px",borderRadius:8,border:"none",cursor:"pointer",transition:"all .15s",fontSize:13,fontWeight:500,background:active===n.id?"#1D2230":"transparent",color:active===n.id?C.sideActive:C.sideText,width:"100%",textAlign:"left"}}><span style={{fontSize:16}}>{n.icon}</span>{n.label}</button>)}
+        {NAV.map(n=>{
+  const isAlerts=n.id==="alertas";
+  const highCount=isAlerts?alertas.filter(a=>a.level==="alta").length:0;
+  return <button key={n.id} onClick={()=>setActive(n.id)} style={{display:"flex",alignItems:"center",gap:10,padding:"9px 12px",borderRadius:8,border:"none",cursor:"pointer",transition:"all .15s",fontSize:13,fontWeight:500,background:active===n.id?"#1D2230":"transparent",color:active===n.id?C.sideActive:C.sideText,width:"100%",textAlign:"left"}}>
+    <span style={{fontSize:16}}>{n.icon}</span>
+    <span style={{flex:1}}>{n.label}</span>
+    {isAlerts&&highCount>0&&<span style={{background:C.red,color:"#fff",borderRadius:100,padding:"1px 7px",fontSize:10,fontWeight:700}}>{highCount}</span>}
+  </button>;
+})}
         <div style={{marginTop:"auto",padding:"16px 10px 8px",borderTop:"1px solid #1D2230"}}>
           <div style={{fontSize:11,color:C.sideText,marginBottom:10,textTransform:"uppercase",letterSpacing:".06em"}}>Equipo</div>
           {INIT.team.map(u=><div key={u.id} style={{display:"flex",alignItems:"center",gap:8,padding:"6px 0"}}><div style={{width:28,height:28,borderRadius:"50%",background:u.color,display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,color:"#fff",flexShrink:0}}>{u.avatar}</div><div><div style={{fontSize:12,color:"#E5E7EB",fontWeight:500}}>{u.name}</div><div style={{fontSize:10,color:C.sideText}}>{u.role}</div></div></div>)}
@@ -272,14 +428,14 @@ function Dashboard({data,alertas,onNav}){
 
 function Viajes({data,setData}){
   const {trips,suppliers}=data;
-  const [form,setForm]=useState({destination:"",country:"AR",type:"nacional",departure:"",returnDate:"",capacity:"45",price:"",supplierId:"",hotelCost:"0",extrasCost:"0",notes:"",minPax:"20",guide:"",insurance:true});
+  const [form,setForm]=useState({destination:"",destinoGroup:"",country:"AR",type:"nacional",departure:"",returnDate:"",capacity:"45",price:"",supplierId:"",hotelCost:"0",extrasCost:"0",notes:"",minPax:"20",guide:"",insurance:true});
   const [view,setView]=useState("lista");
   const enriched=trips.map(t=>{const sup=suppliers.find(s=>s.id===t.supplierId);const rev=t.sold*t.price;const cost=(sup?.busCost||0)+t.hotelCost+t.extrasCost;const profit=rev-cost;const occ=t.capacity?Math.round(t.sold/t.capacity*100):0;const days=daysLeft(t.departure);const breakeven=cost/(t.price||1);return{...t,sup,rev,cost,profit,occ,days,breakeven};});
   const addTrip=()=>{
     if(!form.destination||!form.departure||!form.returnDate||!form.price||!form.supplierId) return;
     const newTrip={id:`T-${String(trips.length+1).padStart(3,"0")}`,destination:form.destination,country:form.country,type:form.type,departure:form.departure,returnDate:form.returnDate,capacity:Number(form.capacity),sold:0,price:Number(form.price),status:"Planificación",supplierId:form.supplierId,hotelCost:Number(form.hotelCost||0),extrasCost:Number(form.extrasCost||0),notes:form.notes,minPax:Number(form.minPax||0),guide:form.guide||"Sin asignar",insurance:form.insurance};
     setData(d=>({...d,trips:[newTrip,...d.trips]}));
-    setForm({destination:"",country:"AR",type:"nacional",departure:"",returnDate:"",capacity:"45",price:"",supplierId:"",hotelCost:"0",extrasCost:"0",notes:"",minPax:"20",guide:"",insurance:true});
+    setForm({destination:"",destinoGroup:"",country:"AR",type:"nacional",departure:"",returnDate:"",capacity:"45",price:"",supplierId:"",hotelCost:"0",extrasCost:"0",notes:"",minPax:"20",guide:"",insurance:true});
     setView("lista");
   };
   const updateStatus=(id,status)=>setData(d=>({...d,trips:d.trips.map(t=>t.id===id?{...t,status}:t)}));
@@ -293,7 +449,23 @@ function Viajes({data,setData}){
       {view==="nuevo"&&<Card>
         <div style={{fontSize:15,fontWeight:600,color:C.t1,marginBottom:18}}>Nuevo viaje</div>
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(180px,1fr))",gap:14}}>
-          <div style={{gridColumn:"1/-1"}}><FInput label="Destino" required value={form.destination} onChange={v=>setForm(f=>({...f,destination:v}))} placeholder="Ej: Bolivia, Machu Picchu"/></div>
+          <div style={{gridColumn:"1/-1"}}>
+  <label style={{fontSize:12,fontWeight:500,color:C.t2,display:"block",marginBottom:5}}>Destino *</label>
+  <div style={{display:"flex",gap:8}}>
+    <select value={form.destinoGroup||""} onChange={e=>{setForm(f=>({...f,destinoGroup:e.target.value,destination:""}));}}
+      style={{padding:"9px 13px",border:`1px solid ${C.border}`,borderRadius:8,fontSize:13,color:C.t1,outline:"none",background:"#FAFAFA",width:200,flexShrink:0}}>
+      <option value="">Categoría...</option>
+      {ALL_DESTINOS.map(g=><option key={g.group} value={g.group}>{g.group}</option>)}
+    </select>
+    <select value={form.destination} onChange={e=>setForm(f=>({...f,destination:e.target.value}))}
+      style={{padding:"9px 13px",border:`1px solid ${!form.destination?"#EF4444":C.border}`,borderRadius:8,fontSize:13,color:C.t1,outline:"none",background:"#FAFAFA",flex:1}}>
+      <option value="">Seleccionar destino...</option>
+      {(ALL_DESTINOS.find(g=>g.group===form.destinoGroup)||ALL_DESTINOS[0]).items.map(d=><option key={d} value={d}>{d}</option>)}
+    </select>
+  </div>
+  <input value={form.destination} onChange={e=>setForm(f=>({...f,destination:e.target.value}))} placeholder="O escribí el destino manualmente..."
+    style={{marginTop:6,padding:"8px 13px",border:`1px solid ${C.border}`,borderRadius:8,fontSize:12,color:C.t2,outline:"none",background:"#FAFAFA",width:"100%"}}/>
+</div>
           <FSelect label="País" required value={form.country} onChange={v=>setForm(f=>({...f,country:v}))} options={[{value:"AR",label:"🇦🇷 Argentina"},{value:"BO",label:"🇧🇴 Bolivia"},{value:"BR",label:"🇧🇷 Brasil"},{value:"PE",label:"🇵🇪 Perú"},{value:"CL",label:"🇨🇱 Chile"},{value:"UY",label:"🇺🇾 Uruguay"},{value:"CO",label:"🇨🇴 Colombia"},{value:"MX",label:"🇲🇽 México"},{value:"US",label:"🇺🇸 EEUU"},{value:"EU",label:"🇪🇺 Europa"}]}/>
           <FSelect label="Tipo" value={form.type} onChange={v=>setForm(f=>({...f,type:v}))} options={[{value:"nacional",label:"Nacional"},{value:"internacional",label:"Internacional"}]}/>
           <FInput label="Salida" required type="date" value={form.departure} onChange={v=>setForm(f=>({...f,departure:v}))}/>
@@ -351,6 +523,32 @@ function Pasajeros({data,setData}){
     setShowForm(false);
   };
   const toggleCL=(pId,field)=>setData(d=>({...d,passengers:d.passengers.map(p=>p.id===pId?{...p,checklist:{...p.checklist,[field]:!p.checklist?.[field]}}:p)}));
+  const downloadList=(tripId)=>{
+    const trip=data.trips.find(t=>t.id===tripId);
+    const pax=data.passengers.filter(p=>p.tripId===tripId);
+    const lines=[
+      `LISTA DE PASAJEROS — ÓRBITA TRAVEL`,
+      `========================================`,
+      `Destino: ${trip?.destination||tripId}`,
+      `Salida: ${dateStr(trip?.departure)} | Regreso: ${dateStr(trip?.returnDate)}`,
+      `Total: ${pax.length} / ${trip?.capacity} pasajeros`,
+      `========================================`,
+      ``,
+      `N° | Nombre | DNI | Tel | Asiento | Pago | Pagado | Saldo | DNI✓ | Pago✓ | Seguro✓ | Contrato✓ | Emergencia | Notas`,
+      ``,
+      ...pax.map((p,i)=>{
+        const pending=pendingAmount(p);
+        const ck=p.checklist||{};
+        return `${String(i+1).padStart(2,"0")} | ${p.fullName} | ${p.dni||"FALTA"} | ${p.phone||"-"} | ${p.seat||"-"} | ${p.payment} | $${p.amountPaid} | ${pending>0?"$"+pending:"OK"} | ${ck.dni?"✓":""} | ${ck.pago?"✓":""} | ${ck.seguro?"✓":""} | ${ck.contrato?"✓":""} | ${p.emergency||"-"} | ${p.notes||"-"}`;
+      }),
+      ``,
+      `Generado: ${new Date().toLocaleString("es-AR")}`,
+    ];
+    const blob=new Blob([lines.join("\n")],{type:"text/plain;charset=utf-8"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");a.href=url;a.download=`lista-${trip?.destination?.replace(/\s+/g,"-")||tripId}.txt`;a.click();
+    URL.revokeObjectURL(url);
+  };
   const printList=(tripId)=>{
     const trip=trips.find(t=>t.id===tripId);const pax=passengers.filter(p=>p.tripId===tripId);
     const win=window.open("","_blank");
@@ -553,6 +751,32 @@ function Tareas({data,setData}){
 function Documentos({data}){
   const {trips,passengers}=data;
   const pendingAmount=(p)=>{const t=trips.find(tr=>tr.id===p.tripId);return(t?.price||0)-p.amountPaid;};
+  const downloadList=(tripId)=>{
+    const trip=data.trips.find(t=>t.id===tripId);
+    const pax=data.passengers.filter(p=>p.tripId===tripId);
+    const lines=[
+      `LISTA DE PASAJEROS — ÓRBITA TRAVEL`,
+      `========================================`,
+      `Destino: ${trip?.destination||tripId}`,
+      `Salida: ${dateStr(trip?.departure)} | Regreso: ${dateStr(trip?.returnDate)}`,
+      `Total: ${pax.length} / ${trip?.capacity} pasajeros`,
+      `========================================`,
+      ``,
+      `N° | Nombre | DNI | Tel | Asiento | Pago | Pagado | Saldo | DNI✓ | Pago✓ | Seguro✓ | Contrato✓ | Emergencia | Notas`,
+      ``,
+      ...pax.map((p,i)=>{
+        const pending=pendingAmount(p);
+        const ck=p.checklist||{};
+        return `${String(i+1).padStart(2,"0")} | ${p.fullName} | ${p.dni||"FALTA"} | ${p.phone||"-"} | ${p.seat||"-"} | ${p.payment} | $${p.amountPaid} | ${pending>0?"$"+pending:"OK"} | ${ck.dni?"✓":""} | ${ck.pago?"✓":""} | ${ck.seguro?"✓":""} | ${ck.contrato?"✓":""} | ${p.emergency||"-"} | ${p.notes||"-"}`;
+      }),
+      ``,
+      `Generado: ${new Date().toLocaleString("es-AR")}`,
+    ];
+    const blob=new Blob([lines.join("\n")],{type:"text/plain;charset=utf-8"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");a.href=url;a.download=`lista-${trip?.destination?.replace(/\s+/g,"-")||tripId}.txt`;a.click();
+    URL.revokeObjectURL(url);
+  };
   const printList=(tripId)=>{
     const trip=trips.find(t=>t.id===tripId);const pax=passengers.filter(p=>p.tripId===tripId);
     const win=window.open("","_blank");
@@ -569,7 +793,10 @@ function Documentos({data}){
       <Card>
         <div style={{fontSize:14,fontWeight:600,color:C.t1,marginBottom:16}}>Lista de pasajeros por viaje</div>
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(240px,1fr))",gap:12}}>
-          {trips.map(t=>{const pax=passengers.filter(p=>p.tripId===t.id);const sinDni=pax.filter(p=>!p.dni).length;const sinPagar=pax.filter(p=>p.payment!=="Pagado").length;return(<div key={t.id} style={{padding:16,border:`1px solid ${C.border}`,borderRadius:10}}><div style={{fontWeight:500,fontSize:13,color:C.t1,marginBottom:4}}>{flags[t.country]||"🌍"} {t.destination}</div><div style={{fontSize:11,color:C.t3,marginBottom:6}}>{dateStr(t.departure)} · {pax.length} pasajeros</div>{sinDni>0&&<div style={{fontSize:11,color:C.red,marginBottom:4}}>⚠️ {sinDni} sin DNI</div>}{sinPagar>0&&<div style={{fontSize:11,color:C.yel,marginBottom:8}}>💰 {sinPagar} pago pendiente</div>}<Btn size="sm" onClick={()=>printList(t.id)} disabled={pax.length===0}>🖨️ Imprimir lista</Btn></div>);})}
+          {trips.map(t=>{const pax=passengers.filter(p=>p.tripId===t.id);const sinDni=pax.filter(p=>!p.dni).length;const sinPagar=pax.filter(p=>p.payment!=="Pagado").length;return(<div key={t.id} style={{padding:16,border:`1px solid ${C.border}`,borderRadius:10}}><div style={{fontWeight:500,fontSize:13,color:C.t1,marginBottom:4}}>{flags[t.country]||"🌍"} {t.destination}</div><div style={{fontSize:11,color:C.t3,marginBottom:6}}>{dateStr(t.departure)} · {pax.length} pasajeros</div>{sinDni>0&&<div style={{fontSize:11,color:C.red,marginBottom:4}}>⚠️ {sinDni} sin DNI</div>}{sinPagar>0&&<div style={{fontSize:11,color:C.yel,marginBottom:8}}>💰 {sinPagar} pago pendiente</div>}<div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+  <Btn size="sm" onClick={()=>printList(t.id)} disabled={pax.length===0}>🖨️ Imprimir</Btn>
+  <Btn size="sm" variant="secondary" onClick={()=>downloadList(t.id)} disabled={pax.length===0}>⬇️ Descargar</Btn>
+</div></div>);})}
         </div>
       </Card>
       <Card>
@@ -582,6 +809,228 @@ function Documentos({data}){
             </div>
           </div>
         ))}
+      </Card>
+    </div>
+  );
+}
+
+
+// ── ALERTAS VIEW ─────────────────────────────────────
+function AlertasView({alertas,data,onResolve}){
+  const [level,setLevel]=useState("");
+  const [type,setType]=useState("");
+  const [owner,setOwner]=useState("");
+  const filtered=alertas.filter(a=>(!level||a.level===level)&&(!type||a.type===type)&&(!owner||a.owner===owner));
+  const lvlStyle={alta:{bg:C.redL,text:C.red},media:{bg:C.yelL,text:C.yel},baja:{bg:C.grnL,text:C.grn}};
+  const typeIcon={operativo:"⚙️",financiero:"💰",legal:"⚖️",comercial:"📈"};
+  const high=alertas.filter(a=>a.level==="alta").length;
+  const med=alertas.filter(a=>a.level==="media").length;
+  const low=alertas.filter(a=>a.level==="baja").length;
+  return(
+    <div style={{display:"flex",flexDirection:"column",gap:20}}>
+      <div>
+        <h2 style={{fontSize:22,fontWeight:700,color:C.t1,marginBottom:4}}>Centro de Alertas</h2>
+        <p style={{fontSize:13,color:C.t2}}>{filtered.length} alertas activas</p>
+      </div>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(120px,1fr))",gap:12}}>
+        <div style={{padding:16,background:C.redL,borderRadius:10,textAlign:"center",border:`1px solid ${C.red}33`}}><div style={{fontSize:28,fontWeight:700,color:C.red}}>{high}</div><div style={{fontSize:12,color:C.red,marginTop:4}}>Críticas</div></div>
+        <div style={{padding:16,background:C.yelL,borderRadius:10,textAlign:"center",border:`1px solid ${C.yel}33`}}><div style={{fontSize:28,fontWeight:700,color:C.yel}}>{med}</div><div style={{fontSize:12,color:C.yel,marginTop:4}}>Medias</div></div>
+        <div style={{padding:16,background:C.grnL,borderRadius:10,textAlign:"center",border:`1px solid ${C.grn}33`}}><div style={{fontSize:28,fontWeight:700,color:C.grn}}>{low}</div><div style={{fontSize:12,color:C.grn,marginTop:4}}>Bajas</div></div>
+        <div style={{padding:16,background:C.accentL,borderRadius:10,textAlign:"center",border:`1px solid ${C.accent}33`}}><div style={{fontSize:28,fontWeight:700,color:C.accent}}>{alertas.length}</div><div style={{fontSize:12,color:C.accent,marginTop:4}}>Total</div></div>
+      </div>
+      <Card style={{padding:14}}>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(150px,1fr))",gap:10}}>
+          <FSelect value={level} onChange={setLevel} options={[{value:"alta",label:"🔴 Alta"},{value:"media",label:"🟡 Media"},{value:"baja",label:"🟢 Baja"}]}/>
+          <FSelect value={type} onChange={setType} options={[{value:"operativo",label:"⚙️ Operativo"},{value:"financiero",label:"💰 Financiero"},{value:"legal",label:"⚖️ Legal"},{value:"comercial",label:"📈 Comercial"}]}/>
+          <FSelect value={owner} onChange={setOwner} options={INIT.team.map(u=>({value:u.name,label:u.name}))}/>
+          {(level||type||owner)&&<Btn variant="secondary" size="sm" onClick={()=>{setLevel("");setType("");setOwner("");}}>Limpiar filtros</Btn>}
+        </div>
+      </Card>
+      {filtered.length===0&&<Card><div style={{textAlign:"center",padding:32}}><div style={{fontSize:48,marginBottom:12}}>✅</div><div style={{fontSize:15,fontWeight:600,color:C.grn}}>Sin alertas con estos filtros</div></div></Card>}
+      <div style={{display:"flex",flexDirection:"column",gap:10}}>
+        {filtered.map(a=>{
+          const trip=data.trips.find(t=>t.id===a.tripId);
+          return(
+            <Card key={a.id} style={{borderLeft:`4px solid ${lvlStyle[a.level]?.text||C.border}`,padding:"14px 18px"}}>
+              <div style={{display:"flex",alignItems:"flex-start",justifyContent:"space-between",gap:12,flexWrap:"wrap"}}>
+                <div style={{flex:1,minWidth:200}}>
+                  <div style={{display:"flex",alignItems:"center",gap:8,flexWrap:"wrap",marginBottom:6}}>
+                    <span style={{fontSize:16}}>{typeIcon[a.type]||"⚠️"}</span>
+                    <div style={{fontWeight:700,color:C.t1,fontSize:14}}>{a.title}</div>
+                    <Badge bg={lvlStyle[a.level]?.bg} text={lvlStyle[a.level]?.text}>{a.level}</Badge>
+                    <Badge bg={C.accentL} text={C.accent}>{a.type}</Badge>
+                  </div>
+                  <div style={{fontSize:13,color:C.t2,marginBottom:6}}>{a.message}</div>
+                  <div style={{fontSize:11,color:C.t3,display:"flex",gap:12,flexWrap:"wrap"}}>
+                    {trip&&<span>{flags[trip.country]||"🌍"} {trip.destination}</span>}
+                    <span>👤 {a.owner}</span>
+                  </div>
+                </div>
+              </div>
+            </Card>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ── CALENDARIO ───────────────────────────────────────
+function Calendario({data,setData}){
+  const [year,setYear]=useState(2026);
+  const [selectedDay,setSelectedDay]=useState(null);
+  const [eventos,setEventos]=useState({});
+  const [newEvento,setNewEvento]=useState({titulo:"",tipo:"viaje",destino:"",notas:""});
+
+  const meses=["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+
+  const getFeriado=(dateStr)=>FERIADOS_2026.find(f=>f.date===dateStr);
+  const getTrip=(dateStr)=>data.trips.find(t=>t.departure===dateStr||t.returnDate===dateStr);
+  const getEvento=(dateStr)=>eventos[dateStr];
+
+  const isWeekend=(d)=>{const day=new Date(d+"T12:00:00").getDay();return day===0||day===6;};
+
+  const addEvento=()=>{
+    if(!selectedDay||!newEvento.titulo) return;
+    setEventos(prev=>({...prev,[selectedDay]:{...newEvento,date:selectedDay}}));
+    setNewEvento({titulo:"",tipo:"viaje",destino:"",notas:""});
+  };
+
+  const deleteEvento=(dateStr)=>{
+    setEventos(prev=>{const n={...prev};delete n[dateStr];return n;});
+    setSelectedDay(null);
+  };
+
+  const exportCalendar=()=>{
+    const lines=["CALENDARIO ÓRBITA TRAVEL "+year,"=".repeat(40),""];
+    Object.entries(eventos).sort().forEach(([date,ev])=>{
+      lines.push(`${dateStr(date)} — ${ev.titulo} (${ev.tipo})`);
+      if(ev.destino) lines.push(`  Destino: ${ev.destino}`);
+      if(ev.notas) lines.push(`  Notas: ${ev.notas}`);
+      lines.push("");
+    });
+    data.trips.forEach(t=>{
+      lines.push(`${dateStr(t.departure)} — VIAJE: ${t.destination}`);
+      lines.push(`  Regreso: ${dateStr(t.returnDate)} · ${t.sold}/${t.capacity} pax · ${usd(t.price)}/asiento`);
+      lines.push("");
+    });
+    const blob=new Blob([lines.join("\n")],{type:"text/plain;charset=utf-8"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");a.href=url;a.download=`calendario-orbita-${year}.txt`;a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return(
+    <div style={{display:"flex",flexDirection:"column",gap:20}}>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:12}}>
+        <div><h2 style={{fontSize:22,fontWeight:700,color:C.t1,marginBottom:4}}>Calendario {year}</h2><p style={{fontSize:13,color:C.t2}}>Feriados, viajes y eventos programados</p></div>
+        <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+          <Btn variant="secondary" size="sm" onClick={()=>setYear(y=>y-1)}>← {year-1}</Btn>
+          <Btn variant="secondary" size="sm" onClick={()=>setYear(y=>y+1)}>{year+1} →</Btn>
+          <Btn variant="secondary" size="sm" onClick={exportCalendar}>⬇️ Exportar</Btn>
+          <Btn variant="danger" size="sm" onClick={()=>{if(confirm("¿Borrar todos los eventos del calendario? Los viajes no se borran."))setEventos({});}}>🗑️ Limpiar</Btn>
+        </div>
+      </div>
+
+      {/* LEYENDA */}
+      <Card style={{padding:14}}>
+        <div style={{display:"flex",gap:16,flexWrap:"wrap",fontSize:12}}>
+          <span>🔴 Feriado</span><span>🟡 Fin de semana</span><span>✈️ Viaje</span><span>🎵 Evento</span><span>📌 Programado</span>
+        </div>
+      </Card>
+
+      {/* CALENDARIO POR MES */}
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(300px,1fr))",gap:16}}>
+        {meses.map((mes,mi)=>{
+          const firstDay=new Date(year,mi,1);
+          const daysInMonth=new Date(year,mi+1,0).getDate();
+          const startDow=(firstDay.getDay()+6)%7; // Monday=0
+          const cells=[];
+          for(let i=0;i<startDow;i++) cells.push(null);
+          for(let d=1;d<=daysInMonth;d++) cells.push(d);
+          return(
+            <Card key={mi} style={{padding:16}}>
+              <div style={{fontSize:13,fontWeight:700,color:C.t1,marginBottom:10,textAlign:"center"}}>{mes} {year}</div>
+              <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:2,marginBottom:6}}>
+                {["L","M","X","J","V","S","D"].map(d=><div key={d} style={{fontSize:10,fontWeight:600,color:C.t3,textAlign:"center",padding:"2px 0"}}>{d}</div>)}
+              </div>
+              <div style={{display:"grid",gridTemplateColumns:"repeat(7,1fr)",gap:2}}>
+                {cells.map((d,i)=>{
+                  if(!d) return <div key={i}/>;
+                  const dateStr2=`${year}-${String(mi+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+                  const feriado=getFeriado(dateStr2);
+                  const trip=getTrip(dateStr2);
+                  const evento=getEvento(dateStr2);
+                  const weekend=isWeekend(dateStr2);
+                  const isSelected=selectedDay===dateStr2;
+                  let bg="transparent";let border="transparent";let textColor=C.t1;
+                  if(feriado){bg=C.redL;textColor=C.red;border=C.red+"44";}
+                  else if(trip){bg="#EFF6FF";textColor=C.accent;border=C.accent+"44";}
+                  else if(evento){bg="#FFF7ED";textColor=C.yel;border=C.yel+"44";}
+                  else if(weekend){bg:"#F9FAFB";textColor=C.t3;}
+                  if(isSelected){border=C.accent;bg=C.accentL;}
+                  return(
+                    <div key={i} onClick={()=>setSelectedDay(isSelected?null:dateStr2)}
+                      style={{padding:"4px 2px",borderRadius:4,textAlign:"center",cursor:"pointer",background:bg,border:`1px solid ${border}`,transition:"all .1s",fontSize:11,fontWeight:600,color:textColor,position:"relative"}}>
+                      {d}
+                      {(feriado||trip||evento)&&<div style={{position:"absolute",bottom:1,left:"50%",transform:"translateX(-50%)",width:4,height:4,borderRadius:"50%",background:textColor}}/>}
+                    </div>
+                  );
+                })}
+              </div>
+            </Card>
+          );
+        })}
+      </div>
+
+      {/* PANEL DÍA SELECCIONADO */}
+      {selectedDay&&(()=>{
+        const feriado=getFeriado(selectedDay);
+        const trip=getTrip(selectedDay);
+        const evento=getEvento(selectedDay);
+        return(
+          <Card style={{border:`2px solid ${C.accent}`}}>
+            <div style={{fontSize:14,fontWeight:600,color:C.t1,marginBottom:14}}>📅 {dateStr(selectedDay)}</div>
+            {feriado&&<div style={{padding:"8px 12px",background:C.redL,borderRadius:8,marginBottom:10,fontSize:13,color:C.red}}>🔴 Feriado: {feriado.name}</div>}
+            {trip&&<div style={{padding:"8px 12px",background:C.accentL,borderRadius:8,marginBottom:10,fontSize:13,color:C.accent}}>✈️ Viaje: {trip.destination} · {trip.sold}/{trip.capacity} pax</div>}
+            {evento&&<div style={{padding:"12px",background:"#FFF7ED",borderRadius:8,marginBottom:10,border:`1px solid ${C.yel}44`}}>
+              <div style={{fontWeight:600,color:C.yel,fontSize:13}}>📌 {evento.titulo} ({evento.tipo})</div>
+              {evento.destino&&<div style={{fontSize:12,color:C.t2,marginTop:4}}>📍 {evento.destino}</div>}
+              {evento.notas&&<div style={{fontSize:12,color:C.t3,marginTop:4}}>📝 {evento.notas}</div>}
+              <div style={{marginTop:10}}><Btn size="sm" variant="danger" onClick={()=>deleteEvento(selectedDay)}>🗑️ Borrar evento</Btn></div>
+            </div>}
+            {!evento&&<div style={{display:"flex",flexDirection:"column",gap:10}}>
+              <div style={{fontSize:13,fontWeight:500,color:C.t2,marginBottom:4}}>+ Agregar evento a este día</div>
+              <FInput label="Título" value={newEvento.titulo} onChange={v=>setNewEvento(e=>({...e,titulo:v}))} placeholder="Ej: Recital Taylor Swift, Partido Boca..."/>
+              <FSelect label="Tipo" value={newEvento.tipo} onChange={v=>setNewEvento(e=>({...e,tipo:v}))} options={[{value:"viaje",label:"✈️ Viaje"},{value:"recital",label:"🎵 Recital"},{value:"partido",label:"⚽ Partido"},{value:"festival",label:"🎪 Festival"},{value:"feriado",label:"🔴 Feriado local"},{value:"otro",label:"📌 Otro"}]}/>
+              <FInput label="Destino (opcional)" value={newEvento.destino} onChange={v=>setNewEvento(e=>({...e,destino:v}))} placeholder="Ciudad o lugar"/>
+              <FInput label="Notas" value={newEvento.notas} onChange={v=>setNewEvento(e=>({...e,notas:v}))} placeholder="Descripción, capacidad estimada..."/>
+              <Btn onClick={addEvento} disabled={!newEvento.titulo}>+ Agregar evento</Btn>
+            </div>}
+          </Card>
+        );
+      })()}
+
+      {/* PRÓXIMOS EVENTOS */}
+      <Card>
+        <div style={{fontSize:14,fontWeight:600,color:C.t1,marginBottom:14}}>Próximos feriados y fines de semana largos {year}</div>
+        <div style={{display:"flex",flexDirection:"column",gap:8}}>
+          {FERIADOS_2026.filter(f=>f.date.startsWith(String(year))).map(f=>{
+            const days=daysLeft(f.date);
+            const trip=getTrip(f.date);
+            return(
+              <div key={f.date} style={{display:"flex",alignItems:"center",gap:12,padding:"10px 14px",background:C.bg,borderRadius:8,border:`1px solid ${C.border}`}}>
+                <div style={{fontSize:18}}>🔴</div>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:13,fontWeight:500,color:C.t1}}>{f.name}</div>
+                  <div style={{fontSize:11,color:C.t3}}>{dateStr(f.date)}</div>
+                </div>
+                {days!==null&&days>=0&&<div style={{fontSize:12,color:days<=30?C.red:C.t3,whiteSpace:"nowrap"}}>en {days} días</div>}
+                {trip?<Badge bg={C.accentL} text={C.accent}>✈️ viaje programado</Badge>:<Btn size="sm" variant="secondary" onClick={()=>setSelectedDay(f.date)}>+ Armar viaje</Btn>}
+              </div>
+            );
+          })}
+        </div>
       </Card>
     </div>
   );
@@ -631,6 +1080,7 @@ export default function OrbitaTravel(){
 
   const screens={
     dashboard:<Dashboard data={data} alertas={alertas} onNav={setActive}/>,
+    alertas:<AlertasView alertas={alertas} data={data}/>,
     viajes:<Viajes data={data} setData={setData}/>,
     pasajeros:<Pasajeros data={data} setData={setData}/>,
     ventas:<Ventas data={data} setData={setData}/>,
@@ -638,6 +1088,7 @@ export default function OrbitaTravel(){
     proveedores:<Proveedores data={data} setData={setData}/>,
     rentabilidad:<Rentabilidad data={data}/>,
     tareas:<Tareas data={data} setData={setData}/>,
+    calendario:<Calendario data={data} setData={setData}/>,
     documentos:<Documentos data={data}/>,
   };
 
