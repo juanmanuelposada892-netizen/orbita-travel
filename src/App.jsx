@@ -430,7 +430,12 @@ function Viajes({data,setData}){
   const {trips,suppliers}=data;
   const [form,setForm]=useState({destination:"",destinoGroup:"",country:"AR",type:"nacional",departure:"",returnDate:"",capacity:"45",price:"",supplierId:"",hotelCost:"0",extrasCost:"0",notes:"",minPax:"20",guide:"",insurance:true});
   const [view,setView]=useState("lista");
-  const enriched=trips.map(t=>{const sup=suppliers.find(s=>s.id===t.supplierId);const rev=t.sold*t.price;const cost=(sup?.busCost||0)+t.hotelCost+t.extrasCost;const profit=rev-cost;const occ=t.capacity?Math.round(t.sold/t.capacity*100):0;const days=daysLeft(t.departure);const breakeven=cost/(t.price||1);return{...t,sup,rev,cost,profit,occ,days,breakeven};});
+  const [showArchived,setShowArchived]=useState(false);
+  const today2=new Date().toISOString().split("T")[0];
+  const activeTrips=trips.filter(t=>t.returnDate>=today2||t.status==="En venta"||t.status==="Planificación"||t.status==="Armado"||t.status==="En ejecución");
+  const archivedTrips=trips.filter(t=>t.returnDate<today2&&t.status!=="En venta"&&t.status!=="Planificación"&&t.status!=="Armado"&&t.status!=="En ejecución");
+  const displayTrips=showArchived?archivedTrips:activeTrips;
+  const enriched=displayTrips.map(t=>{const sup=suppliers.find(s=>s.id===t.supplierId);const rev=t.sold*t.price;const cost=(sup?.busCost||0)+t.hotelCost+t.extrasCost;const profit=rev-cost;const occ=t.capacity?Math.round(t.sold/t.capacity*100):0;const days=daysLeft(t.departure);const breakeven=cost/(t.price||1);return{...t,sup,rev,cost,profit,occ,days,breakeven};});
   const addTrip=()=>{
     if(!form.destination||!form.departure||!form.returnDate||!form.price||!form.supplierId) return;
     const newTrip={id:`T-${String(trips.length+1).padStart(3,"0")}`,destination:form.destination,country:form.country,type:form.type,departure:form.departure,returnDate:form.returnDate,capacity:Number(form.capacity),sold:0,price:Number(form.price),status:"Planificación",supplierId:form.supplierId,hotelCost:Number(form.hotelCost||0),extrasCost:Number(form.extrasCost||0),notes:form.notes,minPax:Number(form.minPax||0),guide:form.guide||"Sin asignar",insurance:form.insurance};
@@ -444,7 +449,11 @@ function Viajes({data,setData}){
     <div style={{display:"flex",flexDirection:"column",gap:20}}>
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:12}}>
         <div><h2 style={{fontSize:22,fontWeight:700,color:C.t1,marginBottom:4}}>Viajes</h2><p style={{fontSize:13,color:C.t2}}>{trips.length} viajes · {trips.filter(t=>t.type==="internacional").length} internacionales</p></div>
-        <div style={{display:"flex",gap:8}}><Btn variant={view==="lista"?"primary":"secondary"} onClick={()=>setView("lista")} size="sm">Lista</Btn><Btn variant={view==="nuevo"?"primary":"secondary"} onClick={()=>setView("nuevo")} size="sm">+ Nuevo viaje</Btn></div>
+        <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+        <Btn variant={view==="lista"&&!showArchived?"primary":"secondary"} onClick={()=>{setView("lista");setShowArchived(false);}} size="sm">✈️ Activos ({activeTrips.length})</Btn>
+        <Btn variant={showArchived?"primary":"secondary"} onClick={()=>setShowArchived(s=>!s)} size="sm">📦 Archivados ({archivedTrips.length})</Btn>
+        <Btn variant={view==="nuevo"?"primary":"secondary"} onClick={()=>setView("nuevo")} size="sm">+ Nuevo viaje</Btn>
+      </div>
       </div>
       {view==="nuevo"&&<Card>
         <div style={{fontSize:15,fontWeight:600,color:C.t1,marginBottom:18}}>Nuevo viaje</div>
@@ -508,18 +517,18 @@ function Viajes({data,setData}){
 
 function Pasajeros({data,setData}){
   const {passengers,trips}=data;
-  const [form,setForm]=useState({fullName:"",dni:"",phone:"",email:"",tripId:"",payment:"Pendiente",amountPaid:"0",seat:"",emergency:"",notes:""});
+  const [form,setForm]=useState({fullName:"",dni:"",phone:"",email:"",tripId:"",newDestino:"",destinoGroup:"",payment:"Pendiente",amountPaid:"0",seat:"",emergency:"",notes:""});
   const [filter,setFilter]=useState({trip:"",payment:"",search:""});
   const [showForm,setShowForm]=useState(false);
   const [viewTrip,setViewTrip]=useState(null);
   const filtered=passengers.filter(p=>{const match=!filter.search||p.fullName.toLowerCase().includes(filter.search.toLowerCase())||p.dni.includes(filter.search);return(!filter.trip||p.tripId===filter.trip)&&(!filter.payment||p.payment===filter.payment)&&match;});
   const pendingAmount=(p)=>{const t=trips.find(tr=>tr.id===p.tripId);return(t?.price||0)-p.amountPaid;};
   const addPassenger=()=>{
-    if(!form.fullName||!form.tripId) return;
+    if(!form.fullName||((!form.tripId)&&(!form.newDestino))) return;
     if(!form.dni){alert("⚠️ El pasajero debe tener DNI.");return;}
-    const newP={id:`P-${String(passengers.length+1).padStart(3,"0")}`,...form,amountPaid:Number(form.amountPaid||0),checklist:{dni:!!form.dni,pago:form.payment==="Pagado",seguro:false,contrato:false}};
+    const newP={id:`P-${String(passengers.length+1).padStart(3,"0")}`,fullName:form.fullName,dni:form.dni,phone:form.phone,email:form.email,tripId:form.tripId||"",payment:form.payment,amountPaid:Number(form.amountPaid||0),seat:form.seat,emergency:form.emergency,notes:form.newDestino?`Destino nuevo: ${form.newDestino}. ${form.notes}`:form.notes,checklist:{dni:!!form.dni,pago:form.payment==="Pagado",seguro:false,contrato:false}};
     setData(d=>({...d,passengers:[newP,...d.passengers],trips:d.trips.map(t=>t.id===form.tripId?{...t,sold:t.sold+1}:t)}));
-    setForm({fullName:"",dni:"",phone:"",email:"",tripId:"",payment:"Pendiente",amountPaid:"0",seat:"",emergency:"",notes:""});
+    setForm({fullName:"",dni:"",phone:"",email:"",tripId:"",newDestino:"",destinoGroup:"",payment:"Pendiente",amountPaid:"0",seat:"",emergency:"",notes:""});
     setShowForm(false);
   };
   const toggleCL=(pId,field)=>setData(d=>({...d,passengers:d.passengers.map(p=>p.id===pId?{...p,checklist:{...p.checklist,[field]:!p.checklist?.[field]}}:p)}));
@@ -628,7 +637,28 @@ function Pasajeros({data,setData}){
           <FInput required label="DNI (obligatorio)" value={form.dni} onChange={v=>setForm(f=>({...f,dni:v}))} placeholder="Sin DNI no se puede agregar"/>
           <FInput label="Teléfono" value={form.phone} onChange={v=>setForm(f=>({...f,phone:v}))}/>
           <FInput label="Email" type="email" value={form.email} onChange={v=>setForm(f=>({...f,email:v}))}/>
-          <FSelect required label="Viaje" value={form.tripId} onChange={v=>setForm(f=>({...f,tripId:v}))} options={trips.map(t=>({value:t.id,label:t.destination}))}/>
+          <div style={{display:"flex",flexDirection:"column",gap:5,gridColumn:"1/-1"}}>
+  <label style={{fontSize:12,fontWeight:500,color:C.t2}}>Viaje existente *</label>
+  <select value={form.tripId} onChange={e=>setForm(f=>({...f,tripId:e.target.value,newDestino:""}))}
+    style={{padding:"9px 13px",border:`1px solid ${!form.tripId&&!form.newDestino?"#EF4444":C.border}`,borderRadius:8,fontSize:13,color:C.t1,outline:"none",background:"#FAFAFA",width:"100%"}}>
+    <option value="">— Seleccionar viaje ya creado —</option>
+    {trips.map(t=><option key={t.id} value={t.id}>{flags[t.country]||"🌍"} {t.destination} · {dateStr(t.departure)}</option>)}
+  </select>
+  <div style={{textAlign:"center",fontSize:11,color:C.t3,padding:"4px 0"}}>— o agregar a un destino nuevo —</div>
+  <div style={{display:"grid",gridTemplateColumns:"180px 1fr",gap:8}}>
+    <select value={form.destinoGroup||""} onChange={e=>setForm(f=>({...f,destinoGroup:e.target.value,newDestino:""}))}
+      style={{padding:"9px 13px",border:`1px solid ${C.border}`,borderRadius:8,fontSize:13,color:C.t1,outline:"none",background:"#FAFAFA"}}>
+      <option value="">Categoría...</option>
+      {ALL_DESTINOS.map(g=><option key={g.group} value={g.group}>{g.group}</option>)}
+    </select>
+    <select value={form.newDestino||""} onChange={e=>setForm(f=>({...f,newDestino:e.target.value,tripId:""}))}
+      style={{padding:"9px 13px",border:`1px solid ${C.border}`,borderRadius:8,fontSize:13,color:C.t1,outline:"none",background:"#FAFAFA"}}>
+      <option value="">Seleccionar destino...</option>
+      {(ALL_DESTINOS.find(g=>g.group===form.destinoGroup)||ALL_DESTINOS[0]).items.map(d=><option key={d} value={d}>{d}</option>)}
+    </select>
+  </div>
+  {form.newDestino&&<div style={{fontSize:11,color:C.accent,padding:"4px 8px",background:C.accentL,borderRadius:6}}>✈️ Se creará nota para: {form.newDestino}</div>}
+</div>
           <FSelect label="Estado pago" value={form.payment} onChange={v=>setForm(f=>({...f,payment:v}))} options={[{value:"Pendiente",label:"Pendiente"},{value:"Seña",label:"Seña"},{value:"Pagado",label:"Pagado completo"}]}/>
           <FInput label="Monto pagado (USD)" type="number" value={form.amountPaid} onChange={v=>setForm(f=>({...f,amountPaid:v}))}/>
           <FInput label="Asiento Nº" value={form.seat} onChange={v=>setForm(f=>({...f,seat:v}))}/>
@@ -694,7 +724,13 @@ function Proveedores({data,setData}){
   const avColors={"Disponible":{bg:C.grnL,text:C.grn},"Consultar":{bg:C.yelL,text:C.yel},"No disponible":{bg:C.redL,text:C.red}};
   return(
     <div style={{display:"flex",flexDirection:"column",gap:20}}>
-      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}><div><h2 style={{fontSize:22,fontWeight:700,color:C.t1,marginBottom:4}}>Proveedores</h2><p style={{fontSize:13,color:C.t2}}>{suppliers.length} registrados</p></div><Btn onClick={()=>setShowForm(s=>!s)}>+ Nuevo proveedor</Btn></div>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",flexWrap:"wrap",gap:12}}>
+    <div><h2 style={{fontSize:22,fontWeight:700,color:C.t1,marginBottom:4}}>Proveedores</h2><p style={{fontSize:13,color:C.t2}}>{suppliers.length} registrados</p></div>
+    <div style={{display:"flex",gap:8}}>
+      <Btn onClick={()=>setShowForm(s=>!s)}>+ Nuevo proveedor</Btn>
+      <Btn variant="danger" size="sm" onClick={()=>{if(window.confirm("¿Borrar todos los proveedores? Esta acción no se puede deshacer."))setData(d=>({...d,suppliers:[]}));}}>🗑️ Limpiar proveedores</Btn>
+    </div>
+  </div>
       {showForm&&<Card><div style={{fontSize:15,fontWeight:600,color:C.t1,marginBottom:16}}>Nuevo proveedor</div><div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(170px,1fr))",gap:12}}><div style={{gridColumn:"1/-1"}}><FInput required label="Empresa" value={form.company} onChange={v=>setForm(f=>({...f,company:v}))}/></div><FInput label="Contacto" value={form.contact} onChange={v=>setForm(f=>({...f,contact:v}))}/><FInput label="Teléfono" value={form.phone} onChange={v=>setForm(f=>({...f,phone:v}))}/><FInput label="Email" type="email" value={form.email} onChange={v=>setForm(f=>({...f,email:v}))}/><FSelect label="Tipo" value={form.type} onChange={v=>setForm(f=>({...f,type:v}))} options={[{value:"bus",label:"Bus"},{value:"hotel",label:"Hotel"},{value:"seguro",label:"Seguro"},{value:"otro",label:"Otro"}]}/><FInput label="Costo (USD)" type="number" value={form.busCost} onChange={v=>setForm(f=>({...f,busCost:v}))}/><FSelect label="Disponibilidad" value={form.availability} onChange={v=>setForm(f=>({...f,availability:v}))} options={[{value:"Disponible",label:"Disponible"},{value:"Consultar",label:"Consultar"},{value:"No disponible",label:"No disponible"}]}/><FSelect label="Rating" value={String(form.rating)} onChange={v=>setForm(f=>({...f,rating:Number(v)}))} options={[5,4,3,2,1].map(n=>({value:String(n),label:"⭐".repeat(n)}))}/><div style={{gridColumn:"1/-1"}}><label style={{fontSize:12,fontWeight:500,color:C.t2,display:"block",marginBottom:5}}>Notas</label><textarea value={form.notes} onChange={e=>setForm(f=>({...f,notes:e.target.value}))} style={{width:"100%",padding:"9px 13px",border:`1px solid ${C.border}`,borderRadius:8,fontSize:13,minHeight:60,resize:"vertical",outline:"none",background:"#FAFAFA"}}/></div></div><div style={{display:"flex",gap:8,marginTop:14}}><Btn onClick={add}>Guardar</Btn><Btn variant="secondary" onClick={()=>setShowForm(false)}>Cancelar</Btn></div></Card>}
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))",gap:14}}>
         {suppliers.map(s=><Card key={s.id}><div style={{display:"flex",alignItems:"center",gap:10,marginBottom:12}}><div style={{fontSize:22}}>{typeLabel[s.type]?.split(" ")[0]||"📦"}</div><div style={{flex:1}}><div style={{fontWeight:600,fontSize:14,color:C.t1}}>{s.company}</div><div style={{fontSize:12,color:C.t2}}>{typeLabel[s.type]||s.type}</div></div><Badge bg={avColors[s.availability]?.bg||C.accentL} text={avColors[s.availability]?.text||C.accent}>{s.availability}</Badge></div><div style={{display:"flex",flexDirection:"column",gap:5}}><div style={{fontSize:12,color:C.t2}}>👤 {s.contact}</div><div style={{fontSize:12,color:C.t2}}>📞 {s.phone}</div>{s.email&&<div style={{fontSize:12,color:C.t2}}>✉️ {s.email}</div>}{s.busCost>0&&<div style={{fontSize:12,fontWeight:600,color:C.t1}}>💵 {usd(s.busCost)}</div>}{s.notes&&<div style={{fontSize:11,color:C.t3,marginTop:4}}>{s.notes}</div>}<div style={{fontSize:13,color:"#F59E0B"}}>{"⭐".repeat(s.rating||0)}</div></div></Card>)}
@@ -1102,3 +1138,4 @@ export default function OrbitaTravel(){
     </div>
   );
 }
+
