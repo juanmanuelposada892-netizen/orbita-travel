@@ -759,8 +759,8 @@ function Pasajeros({data,setData}){
 
 function Ventas({data,setData}){
   const {sales,trips}=data;
-  const [form,setForm]=useState({date:new Date().toISOString().split("T")[0],channel:"Instagram",seller:"Juan",amount:"",tripId:"",concept:"",metodoPago:"Efectivo"});
-  const addSale=()=>{if(!form.tripId||!form.amount||!form.date)return;const newS={id:`V-${String(sales.length+1).padStart(3,"0")}`,...form,amount:Number(form.amount)};setData(d=>({...d,sales:[newS,...d.sales]}));setForm(f=>({...f,amount:"",concept:"",tripId:"",metodoPago:"Efectivo"}));};
+  const [form,setForm]=useState({date:new Date().toISOString().split("T")[0],channel:"Instagram",seller:"Juan",amount:"",tripId:"",newDestino:"",destinoGroup:"",concept:"",metodoPago:"Efectivo"});
+  const addSale=()=>{if(!form.tripId||!form.amount||!form.date)return;const newS={id:`V-${String(sales.length+1).padStart(3,"0")}`,...form,amount:Number(form.amount)};setData(d=>({...d,sales:[newS,...d.sales]}));setForm(f=>({...f,amount:"",concept:"",tripId:"",newDestino:"",destinoGroup:"",metodoPago:"Efectivo"}));};
   const byChannel=["Instagram","WhatsApp","Ads","Referido","Oficina"].map(ch=>({ch,total:sales.filter(s=>s.channel===ch).reduce((a,s)=>a+s.amount,0),count:sales.filter(s=>s.channel===ch).length}));
   const totalSales=sales.reduce((a,s)=>a+s.amount,0);
   return(
@@ -771,7 +771,31 @@ function Ventas({data,setData}){
           <Card><div style={{fontSize:14,fontWeight:600,color:C.t1,marginBottom:14}}>Por canal</div><div style={{display:"flex",flexDirection:"column",gap:10}}>{byChannel.filter(c=>c.total>0).map(c=><div key={c.ch} style={{display:"flex",alignItems:"center",gap:12}}><div style={{width:90,fontSize:12,color:C.t2}}>{c.ch}</div><div style={{flex:1}}><ProgressBar pct={totalSales?c.total/totalSales*100:0}/></div><div style={{fontSize:12,color:C.t1,fontWeight:600,width:60,textAlign:"right"}}>{usd(c.total)}</div><div style={{fontSize:11,color:C.t3,width:20,textAlign:"right"}}>{c.count}</div></div>)}</div></Card>
           <Card style={{padding:0}}><Table headers={["Fecha","Canal","Método","Vendedor","Viaje","Concepto","Monto"]} rows={sales.map(s=>{const trip=trips.find(t=>t.id===s.tripId);const metodoIcon={"Efectivo":"💵","Transferencia":"🏦","Tarjeta débito":"💳","Tarjeta crédito":"💳","MercadoPago":"📱","Cheque":"📝"};return[dateStr(s.date),<Badge bg={C.accentL} text={C.accent}>{s.channel}</Badge>,<span style={{fontSize:12}}>{metodoIcon[s.metodoPago]||"💵"} {s.metodoPago||"Efectivo"}</span>,s.seller,<span style={{fontSize:12}}>{flags[trip?.country]||"🌍"} {trip?.destination||"-"}</span>,<span style={{fontSize:12,color:C.t2}}>{s.concept||"-"}</span>,<span style={{fontWeight:600,color:C.grn}}>{usd(s.amount)}</span>];})}/></Card>
         </div>
-        <Card><div style={{fontSize:15,fontWeight:600,color:C.t1,marginBottom:16}}>Registrar venta</div><div style={{display:"flex",flexDirection:"column",gap:12}}><FInput label="Fecha" type="date" value={form.date} onChange={v=>setForm(f=>({...f,date:v}))}/><FSelect label="Canal" value={form.channel} onChange={v=>setForm(f=>({...f,channel:v}))} options={["Instagram","WhatsApp","Ads","Referido","Oficina"].map(c=>({value:c,label:c}))}/><FSelect label="Vendedor" value={form.seller} onChange={v=>setForm(f=>({...f,seller:v}))} options={INIT.team.map(u=>({value:u.name,label:u.name}))}/><FSelect required label="Viaje" value={form.tripId} onChange={v=>setForm(f=>({...f,tripId:v}))} options={trips.map(t=>({value:t.id,label:t.destination}))}/><FInput label="Concepto" value={form.concept} onChange={v=>setForm(f=>({...f,concept:v}))} placeholder="Asiento completo, seña..."/><FSelect label="Método de pago" value={form.metodoPago||"Efectivo"} onChange={v=>setForm(f=>({...f,metodoPago:v}))} options={[{value:"Efectivo",label:"💵 Efectivo"},{value:"Transferencia",label:"🏦 Transferencia"},{value:"Tarjeta débito",label:"💳 Tarjeta débito"},{value:"Tarjeta crédito",label:"💳 Tarjeta crédito"},{value:"MercadoPago",label:"📱 MercadoPago"},{value:"Cheque",label:"📝 Cheque"}]}/><FInput required label="Monto (USD)" type="number" value={form.amount} onChange={v=>setForm(f=>({...f,amount:v}))}/><Btn onClick={addSale}>Registrar venta</Btn></div></Card>
+        <Card><div style={{fontSize:15,fontWeight:600,color:C.t1,marginBottom:16}}>Registrar venta</div><div style={{display:"flex",flexDirection:"column",gap:12}}><FInput label="Fecha" type="date" value={form.date} onChange={v=>setForm(f=>({...f,date:v}))}/><FSelect label="Canal" value={form.channel} onChange={v=>setForm(f=>({...f,channel:v}))} options={["Instagram","WhatsApp","Ads","Referido","Oficina"].map(c=>({value:c,label:c}))}/><FSelect label="Vendedor" value={form.seller} onChange={v=>setForm(f=>({...f,seller:v}))} options={INIT.team.map(u=>({value:u.name,label:u.name}))}/><div style={{display:"flex",flexDirection:"column",gap:5}}>
+  <label style={{fontSize:12,fontWeight:500,color:C.t2}}>Destino / Viaje *</label>
+  <div style={{display:"grid",gridTemplateColumns:"150px 1fr",gap:8}}>
+    <select value={form.destinoGroup||""} onChange={e=>setForm(f=>({...f,destinoGroup:e.target.value,newDestino:"",tripId:""}))}
+      style={{padding:"9px 13px",border:`1px solid ${C.border}`,borderRadius:8,fontSize:13,color:C.t1,outline:"none",background:"#FAFAFA"}}>
+      <option value="">Categoría...</option>
+      <option value="__activos__">✈️ Viajes activos</option>
+      {ALL_DESTINOS.map(g=><option key={g.group} value={g.group}>{g.group}</option>)}
+    </select>
+    <select value={form.tripId||form.newDestino||""} onChange={e=>{
+      const val=e.target.value;
+      const isTrip=trips.find(t=>t.id===val);
+      if(isTrip) setForm(f=>({...f,tripId:val,newDestino:""}));
+      else setForm(f=>({...f,newDestino:val,tripId:""}));
+    }} style={{padding:"9px 13px",border:`1px solid ${(!form.tripId&&!form.newDestino)?"#EF4444":C.border}`,borderRadius:8,fontSize:13,color:C.t1,outline:"none",background:"#FAFAFA"}}>
+      <option value="">Seleccionar...</option>
+      {form.destinoGroup==="__activos__"
+        ? trips.map(t=><option key={t.id} value={t.id}>{flags[t.country]||"🌍"} {t.destination} · {dateStr(t.departure)}</option>)
+        : ALL_DESTINOS.find(g=>g.group===form.destinoGroup)?.items.map(d=><option key={d} value={d}>{d}</option>)||[]
+      }
+    </select>
+  </div>
+  {form.tripId&&<div style={{fontSize:11,color:C.grn,padding:"4px 8px",background:C.grnL,borderRadius:6}}>✈️ {trips.find(t=>t.id===form.tripId)?.destination}</div>}
+  {form.newDestino&&<div style={{fontSize:11,color:C.accent,padding:"4px 8px",background:C.accentL,borderRadius:6}}>📍 {form.newDestino}</div>}
+</div><FInput label="Concepto" value={form.concept} onChange={v=>setForm(f=>({...f,concept:v}))} placeholder="Asiento completo, seña..."/><FSelect label="Método de pago" value={form.metodoPago||"Efectivo"} onChange={v=>setForm(f=>({...f,metodoPago:v}))} options={[{value:"Efectivo",label:"💵 Efectivo"},{value:"Transferencia",label:"🏦 Transferencia"},{value:"Tarjeta débito",label:"💳 Tarjeta débito"},{value:"Tarjeta crédito",label:"💳 Tarjeta crédito"},{value:"MercadoPago",label:"📱 MercadoPago"},{value:"Cheque",label:"📝 Cheque"}]}/><FInput required label="Monto (USD)" type="number" value={form.amount} onChange={v=>setForm(f=>({...f,amount:v}))}/><Btn onClick={addSale}>Registrar venta</Btn></div></Card>
       </div>
     </div>
   );
@@ -1325,5 +1349,6 @@ export default function OrbitaTravel(){
     </div>
   );
 }
+
 
 
